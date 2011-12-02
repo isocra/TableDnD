@@ -75,6 +75,7 @@
  *                         draggable
  *                         Improved the serialize method to use a default (and settable) regular expression.
  *                         Added tableDnDupate() and tableDnDSerialize() to be called when you are outside the table
+ * Version 0.6: 2011-12-02 Added support for touch devices
  */
 // Determine if this is a touch device
 var hasTouch = 'ontouchstart' in document.documentElement,
