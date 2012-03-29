@@ -127,11 +127,11 @@ jQuery.tableDnD = {
         var config = table.tableDnDConfig;
 		if (config.dragHandle) {
 			// We only need to add the event to the specified cells
-			var cells = jQuery("td."+table.tableDnDConfig.dragHandle, table);
+			var cells = jQuery(table.tableDnDConfig.dragHandle, table);
 			cells.each(function() {
 				// The cell is bound to "this"
                 jQuery(this).bind(startEvent, function(ev) {
-					jQuery.tableDnD.initialiseDrag(this.parentNode, table, this, ev, config);
+					jQuery.tableDnD.initialiseDrag(jQuery(this).parents('tr')[0], table, this, ev, config);
                     return false;
                 });
 			})
