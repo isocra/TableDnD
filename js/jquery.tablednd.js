@@ -83,6 +83,15 @@ var hasTouch = 'ontouchstart' in document.documentElement,
 	moveEvent = hasTouch ? 'touchmove' : 'mousemove',
 	endEvent = hasTouch ? 'touchend' : 'mouseup';
 
+// If we're on a touch device, then wire up the events
+// see http://stackoverflow.com/a/8456194/1316086
+if (hasTouch) {
+	$.each("touchstart touchmove touchend".split(" "), function(i, name) {
+	    jQuery.event.fixHooks[name] = jQuery.event.mouseHooks;
+	});
+	alert("has Touch");
+}
+
 jQuery.tableDnD = {
     /** Keep hold of the current table being dragged */
     currentTable : null,
