@@ -41,7 +41,7 @@ $(document).ready(function() {
         onDrop: function(table, row) {
             alert($('#table-5').tableDnDSerialize());
         },
-        dragHandle: "dragHandle"
+        dragHandle: ".dragHandle"
     });
 
     $("#table-5 tr").hover(function() {
@@ -256,7 +256,7 @@ to null to stop this behaviour.
         onDrop: function(table, row) {
             alert($.tableDnD.serialize());
         },
-        dragHandle: "dragHandle"
+        dragHandle: ".dragHandle"
     });
 </pre>
 <div class="tableDemo">

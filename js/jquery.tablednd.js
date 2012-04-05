@@ -142,6 +142,7 @@ jQuery.tableDnD = {
           jQuery.tableDnD.initialiseDrag(this.parentNode, table, this, ev, config);
           return false;
         });
+<<<<<<< HEAD
       })
     } else {
       // For backwards compatibility, we add the event to the whole row
@@ -156,6 +157,74 @@ jQuery.tableDnD = {
               return false;
             }
           }).css("cursor", "move"); // Store the tableDnD object
+=======
+
+        // Don't break the chain
+        return this;
+    },
+
+    /** This function makes all the rows on the table draggable apart from those marked as "NoDrag" */
+    makeDraggable: function(table) {
+		
+        var config = table.tableDnDConfig;
+		if (config.dragHandle) {
+			// We only need to add the event to the specified cells
+			var cells = jQuery(table.tableDnDConfig.dragHandle, table);
+			cells.each(function() {
+				// The cell is bound to "this"
+                jQuery(this).bind(startEvent, function(ev) {
+					jQuery.tableDnD.initialiseDrag(jQuery(this).parents('tr')[0], table, this, ev, config);
+                    return false;
+                });
+			})
+		} else {
+			// For backwards compatibility, we add the event to the whole row
+	        var rows = jQuery("tr", table); // get all the rows as a wrapped set
+	        rows.each(function() {
+				// Iterate through each row, the row is bound to "this"
+				var row = jQuery(this);
+				if (! row.hasClass("nodrag")) {
+	                row.bind(startEvent, function(ev) {
+	                    if (ev.target.tagName == "TD") {
+							jQuery.tableDnD.initialiseDrag(this, table, this, ev, config);
+	                        return false;
+	                    }
+	                }).css("cursor", "move"); // Store the tableDnD object
+				}
+			});
+		}
+	},
+	
+	initialiseDrag: function(dragObject, table, target, evnt, config) {
+        jQuery.tableDnD.dragObject = dragObject;
+        jQuery.tableDnD.currentTable = table;
+        jQuery.tableDnD.mouseOffset = jQuery.tableDnD.getMouseOffset(target, evnt);
+        jQuery.tableDnD.originalOrder = jQuery.tableDnD.serialize();
+        // Now we need to capture the mouse up and mouse move event
+        // We can use bind so that we don't interfere with other event handlers
+        jQuery(document)
+            .bind(moveEvent, jQuery.tableDnD.mousemove)
+            .bind(endEvent, jQuery.tableDnD.mouseup);
+        if (config.onDragStart) {
+            // Call the onDragStart method if there is one
+            config.onDragStart(table, target);
+        }
+	},
+
+	updateTables: function() {
+		this.each(function() {
+			// this is now bound to each matching table
+			if (this.tableDnDConfig) {
+				jQuery.tableDnD.makeDraggable(this);
+			}
+		})
+	},
+
+    /** Get the mouse coordinates from the event (allowing for browser differences) */
+    mouseCoords: function(ev){
+        if(ev.pageX || ev.pageY){
+            return {x:ev.pageX, y:ev.pageY};
+>>>>>>> Incorporated changes from GBH
         }
       });
     }
