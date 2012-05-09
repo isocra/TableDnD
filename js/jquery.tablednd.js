@@ -372,7 +372,7 @@ jQuery.tableDnD = {
 
     serializeTable: function(table) {
         var result = "";
-        var tableId = table.id;
+        var paramName = table.tableDnDConfig.serializeParamName || table.id;
         var rows = table.rows;
         for (var i=0; i<rows.length; i++) {
             if (result.length > 0) result += "&";
@@ -381,7 +381,7 @@ jQuery.tableDnD = {
                 rowId = rowId.match(table.tableDnDConfig.serializeRegexp)[0];
             }
 
-            result += tableId + '[]=' + rowId;
+            result += paramName + '[]=' + rowId;
         }
         return result;
     },
