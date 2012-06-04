@@ -90,7 +90,6 @@ if (hasTouch) {
     $.each("touchstart touchmove touchend".split(" "), function(i, name) {
         jQuery.event.fixHooks[name] = jQuery.event.mouseHooks;
     });
-    alert("has Touch");
 }
 
 jQuery.tableDnD = {
