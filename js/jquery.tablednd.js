@@ -362,6 +362,33 @@ jQuery.tableDnD = {
             jQuery.tableDnD.currentTable = null; // let go of the table too
         }
     },
+    
+    jsonize: function() {
+        if (jQuery.tableDnD.currentTable) {
+            return jQuery.tableDnD.jsonizeTable(jQuery.tableDnD.currentTable);
+        } else {
+            return "Error: No Table id set, you need to set an id on your table and every row";
+        }
+    },
+    
+    jsonizeTable: function(table) {
+        var result = "{";
+        var tableId = table.id;
+        var rows = table.rows;
+        result += '"' + tableId + '" : [';
+        for (var i=0; i<rows.length; i++) {
+            
+            var rowId = rows[i].id;
+            if (rowId && rowId && table.tableDnDConfig && table.tableDnDConfig.serializeRegexp) {
+                rowId = rowId.match(table.tableDnDConfig.serializeRegexp)[0];
+            }
+
+            result += '"' + rowId + '"';
+            if (i<rows.length-1) result += ",";
+        }
+        result += "]}";
+        return result;
+    },
 
     serialize: function() {
         if (jQuery.tableDnD.currentTable) {
