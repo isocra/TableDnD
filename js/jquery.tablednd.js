@@ -289,9 +289,9 @@ jQuery.tableDnD = {
             var currentRow = jQuery.tableDnD.findDropTargetRow(dragObj, y);
             if (currentRow) {
                 // TODO worry about what happens when there are multiple TBODIES
-                if (movingDown && jQuery.tableDnD.dragObject != currentRow) {
+                if (movingDown && jQuery.tableDnD.dragObject != currentRow && jQuery.tableDnD.dragObject.parentNode) {
                     jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow.nextSibling);
-                } else if (! movingDown && jQuery.tableDnD.dragObject != currentRow) {
+                } else if (! movingDown && jQuery.tableDnD.dragObject != currentRow && jQuery.tableDnD.dragObject.parentNode) {
                     jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow);
                 }
             }
