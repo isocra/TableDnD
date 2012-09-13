@@ -120,6 +120,8 @@ jQuery.tableDnD = {
                 scrollAmount: 5,
                 /** Hierarchy level to support parent child. 0 switches this functionality off */
                 hierarchyLevel: 0,
+                /** Automatic clean-up to ensure relationship integrity */
+                autoCleanRelations: true,
 
                 serializeRegexp: /[^\-]*$/, // The regular expression to use to trim row IDs
                 serializeParamName: null, // If you want to specify another parameter name instead of the table ID
@@ -373,6 +375,23 @@ jQuery.tableDnD = {
                     .unbind(endEvent, jQuery.tableDnD.mouseup);
             var droppedRow = jQuery.tableDnD.dragObject;
             var config = jQuery.tableDnD.currentTable.tableDnDConfig;
+            if (config.hierarchyLevel && config.autoCleanRelations) {
+                $(jQuery.tableDnD.currentTable.rows).first().find('div.indent').each(function () {
+                    $(this).remove();
+                });
+                if (config.hierarchyLevel > 1) {
+                    $(jQuery.tableDnD.currentTable.rows).each(function () {
+                        var myLevel = $(this).find('div.indent').length;
+                        if (myLevel > 1) {
+                            var parentLevel = $(this).prev().find('div.indent').length;
+                            while (myLevel > parentLevel + 1) {
+                               $(this).find('div.indent:first').remove();
+                               myLevel = $(this).find('div.indent').length;
+                            }
+                        }
+                    });
+                }
+            }
             // If we have a dragObject, then we need to release it,
             // The row will already have been moved to the right place so we just reset stuff
             if (config.onDragClass) {
