@@ -100,7 +100,8 @@ jQuery.tableDnD = {
     dragObject: null,
     /** The current mouse offset */
     mouseOffset: null,
-    /** Remember the old value of Y so that we don't do too much processing */
+    /** Remember the old value of X and Y so that we don't do too much processing */
+    oldX: 0,
     oldY: 0,
 
     /** Actually build the structure */
@@ -248,6 +249,7 @@ jQuery.tableDnD = {
         var dragObj = jQuery(jQuery.tableDnD.dragObject);
         var config = jQuery.tableDnD.currentTable.tableDnDConfig;
         var mousePos = jQuery.tableDnD.mouseCoords(ev);
+        var x = mousePos.x - jQuery.tableDnD.mouseOffset.x;
         var y = mousePos.y - jQuery.tableDnD.mouseOffset.y;
         //auto scroll the window
         var yOffset = window.pageYOffset;
@@ -297,6 +299,18 @@ jQuery.tableDnD = {
         }
 
         return false;
+    },
+
+    findDragDirection: function (x,y) {
+        var moving = {
+            horizontal: x == jQuery.tableDnD.oldX ? 0 : x > jQuery.tableDnD.oldX ? -1 : 1,
+            vertical  : y == jQuery.tableDnD.oldY ? 0 : y > jQuery.tableDnD.oldY ? -1 : 1
+        };
+        // update the old value
+        jQuery.tableDnD.oldX = x;
+        jQuery.tableDnD.oldY = y;
+
+        return moving;
     },
 
     /** We're only worried about the y position really, because we can only move rows up and down */
