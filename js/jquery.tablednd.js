@@ -118,6 +118,8 @@ jQuery.tableDnD = {
                 onDrop: null,
                 onDragStart: null,
                 scrollAmount: 5,
+                /** Hierarchy level to support parent child. 0 switches this functionality off */
+                hierarchyLevel: 0,
 
                 serializeRegexp: /[^\-]*$/, // The regular expression to use to trim row IDs
                 serializeParamName: null, // If you want to specify another parameter name instead of the table ID
@@ -275,29 +277,41 @@ jQuery.tableDnD = {
             }
         }
 
-        if (y != jQuery.tableDnD.oldY) {
-            // work out if we're going up or down...
-            var movingDown = y > jQuery.tableDnD.oldY;
-            // update the old value
-            jQuery.tableDnD.oldY = y;
-            // update the style to show we're dragging
-            if (config.onDragClass) {
-                dragObj.addClass(config.onDragClass);
-            } else {
-                dragObj.css(config.onDragStyle);
-            }
+        // update the style to show we're dragging
+        if (config.onDragClass) {
+            dragObj.addClass(config.onDragClass);
+        } else {
+            dragObj.css(config.onDragStyle);
+        }
+        var currentRow = jQuery.tableDnD.findDropTargetRow(dragObj, y);
+
+        var moving = jQuery.tableDnD.findDragDirection(x, y);
+        if (0 != moving.vertical) {
             // If we're over a row then move the dragged row to there so that the user sees the
             // effect dynamically
-            var currentRow = jQuery.tableDnD.findDropTargetRow(dragObj, y);
-            if (currentRow) {
-                if (movingDown && jQuery.tableDnD.dragObject != currentRow && (jQuery.tableDnD.dragObject.parentNode == currentRow.parentNode)) {
+            if (currentRow && jQuery.tableDnD.dragObject != currentRow
+                && jQuery.tableDnD.dragObject.parentNode == currentRow.parentNode) {
+                if (0 > moving.vertical) {
                     jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow.nextSibling);
-                } else if (! movingDown && jQuery.tableDnD.dragObject != currentRow && (jQuery.tableDnD.dragObject.parentNode == currentRow.parentNode)) {
+                } else if (0 < moving.vertical) {
                     jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow);
                 }
             }
         }
-
+        if (config.hierarchyLevel && 0 != moving.horizontal) {
+            // We only care if moving left or right on the current row
+            if (currentRow && jQuery.tableDnD.dragObject == currentRow) {
+                var currentLevel = $(currentRow).find('div.indent').length;
+                if (0 < moving.horizontal && currentLevel > 0) {
+                    $(currentRow).find('div.indent').first().remove();
+                } else if (0 > moving.horizontal && currentLevel < config.hierarchyLevel) {
+                    if ($(currentRow).prev().find('div.indent').length >= currentLevel) {
+                        $(currentRow).children(':first').prepend('<div class="indent">&nbsp;</div>');
+                        currentLevel++;
+                    }
+                }
+            }
+        }
         return false;
     },
 
