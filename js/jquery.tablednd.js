@@ -122,9 +122,11 @@ jQuery.tableDnD = {
                 hierarchyLevel: 0,
                 /** Automatic clean-up to ensure relationship integrity */
                 autoCleanRelations: true,
+                /** Specify a number (4) as number of spaces or any indent string for JSON.stringify */
+                jsonPretifySeparator: '\t\t\t',
 
                 serializeRegexp: /[^\-]*$/, // The regular expression to use to trim row IDs
-                serializeParamName: null, // If you want to specify another parameter name instead of the table ID
+                serializeParamName: false, // If you want to specify another parameter name instead of the table ID
                 dragHandle: null // If you give the name of a class here, then only Cells with this class will be draggable
             }, options || {});
 
@@ -408,41 +410,19 @@ jQuery.tableDnD = {
             jQuery.tableDnD.currentTable = null; // let go of the table too
         }
     },
-
-    jsonize: function() {
-        if (jQuery.tableDnD.currentTable) {
-            return jQuery.tableDnD.jsonizeTable(jQuery.tableDnD.currentTable);
-        } else {
-            return "Error: No Table id set, you need to set an id on your table and every row";
-        }
+    jsonize: function(pretify) {
+        table = $.tableDnD.currentTable;
+        if (pretify)
+            return JSON.stringify(
+                $.tableDnD.tableData(table),
+                null,
+                table.tableDnDConfig.jsonPretifySeparator
+            );
+        return JSON.stringify($.tableDnD.tableData(table));
     },
-
-    jsonizeTable: function(table) {
-        var result = "{";
-        var tableId = table.id;
-        var rows = table.rows;
-        result += '"' + tableId + '" : [';
-        for (var i=0; i<rows.length; i++) {
-            var rowId = rows[i].id;
-            if (rowId && rowId && table.tableDnDConfig && table.tableDnDConfig.serializeRegexp) {
-                rowId = rowId.match(table.tableDnDConfig.serializeRegexp)[0];
-            }
-
-            result += '"' + rowId + '"';
-            if (i<rows.length-1) result += ",";
-        }
-        result += "]}";
-        return result;
-    },
-
     serialize: function() {
-        if (jQuery.tableDnD.currentTable) {
-            return jQuery.tableDnD.serializeTable(jQuery.tableDnD.currentTable);
-        } else {
-            return "Error: No Table id set, you need to set an id on your table and every row";
-        }
+        return $.param($.tableDnD.tableData($.tableDnD.currentTable));
     },
-
     serializeTable: function(table) {
         var result = "";
         var paramName = table.tableDnDConfig.serializeParamName || table.id;
@@ -458,15 +438,71 @@ jQuery.tableDnD = {
         return result;
     },
     serializeTables: function() {
-        var result = "";
-        this.each(function() {
-            // this is now bound to each matching table
-            result += jQuery.tableDnD.serializeTable(this);
+        var result = [];
+        $('table').each(function() {
+            if (this.id)
+                result.push($.param($.tableDnD.tableData(this)));
         });
-        return result;
+        return result.join('&');
+    },
+    tableData: function (table) {
+        if (!table)
+            table = $.tableDnD.currentTable;
+        if (!table||!table.id)
+            return {error: { code: 500, message: "Not a volid table, no serializable unique id provided."}};
+
+        var rows         = table.rows,
+            paramName    = table.tableDnDConfig.serializeParamName || table.id,
+            currentID    = paramName,
+            previousIDs  = {},
+            currentLevel = 0,
+            data         = {};
+
+        var getSerializeRegexp = function (rowId) {
+            if (rowId && table.tableDnDConfig && table.tableDnDConfig.serializeRegexp)
+                return rowId.match(table.tableDnDConfig.serializeRegexp)[0];
+            return rowId;
+        };
+
+        data[currentID] = [];
+
+        for (var i=0; i < rows.length; i++) {
+            if (table.tableDnDConfig.hierarchyLevel) {
+                var indentLevel = $(rows[i]).find('div.indent').length;
+                if (indentLevel == 0) {
+                    currentID   = paramName;
+                    rawID       = null;
+                    previousIDs = [];
+                }
+                else if (indentLevel > currentLevel) {
+                    previousIDs[currentID] = indentLevel;
+                    currentID = getSerializeRegexp(rows[i-1].id);
+                }
+                else if (indentLevel < currentLevel) {
+                    for (var key in previousIDs) if (previousIDs.hasOwnProperty(key)) {
+                        if (previousIDs[key] == indentLevel)
+                            currentID        = key;
+                        if (previousIDs[key] >= currentLevel)
+                            previousIDs[key] = 0;
+                    }
+                }
+                currentLevel = indentLevel;
+                if (!$.isArray(data[currentID]))
+                    data[currentID] = [];
+                rowID = getSerializeRegexp(rows[i].id);
+                if (rowID)
+                    data[currentID].push(rowID);
+
+            }
+            else {
+                rowID = getSerializeRegexp(rows[i].id);
+                if (rowID)
+                    data[currentID].push(rowID);
+            }
+        }
+        return data;
     }
 };
-
 
 jQuery.fn.extend(
     {
@@ -475,4 +511,5 @@ jQuery.fn.extend(
         tableDnDSerialize: jQuery.tableDnD.serializeTables
     }
 );
+
 })(jQuery);
