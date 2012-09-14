@@ -506,9 +506,11 @@ jQuery.tableDnD = {
 
 jQuery.fn.extend(
     {
-        tableDnD : jQuery.tableDnD.build,
-        tableDnDUpdate : jQuery.tableDnD.updateTables,
-        tableDnDSerialize: jQuery.tableDnD.serializeTables
+        tableDnD             : jQuery.tableDnD.build,
+        tableDnDUpdate       : jQuery.tableDnD.updateTables,
+        tableDnDSerialize    : jQuery.tableDnD.serialize,
+        tableDnDSerializeAll : jQuery.tableDnD.serializeTables,
+        tableDnDData         : jQuery.tableDnD.tableData
     }
 );
 
