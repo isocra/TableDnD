@@ -79,7 +79,7 @@ tr.myDragClass td {
 }
 
 td.dragHandle {
-    
+
 }
 
 td.showDragHandle {
@@ -92,4 +92,9 @@ td.showDragHandle {
 .versionHistory td {
     vertical-align: top;
     padding: 0.3em;
+}
+
+div.indent {
+    width: 30px;
+    float: left;
 }
