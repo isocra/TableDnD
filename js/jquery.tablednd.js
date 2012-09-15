@@ -463,8 +463,9 @@ jQuery.tableDnD = {
         var rows         = table.rows,
             paramName    = table.tableDnDConfig.serializeParamName || table.id,
             currentID    = paramName,
-            previousIDs  = {},
+            previousIDs  = [],
             currentLevel = 0,
+            rowID        = null,
             data         = {};
 
         var getSerializeRegexp = function (rowId) {
@@ -477,36 +478,37 @@ jQuery.tableDnD = {
 
         for (var i=0; i < rows.length; i++) {
             if (table.tableDnDConfig.hierarchyLevel) {
-                var indentLevel = $(rows[i]).find('div.indent').length;
+                var indentLevel = $(rows[i]).children(':first').find('div.indent').length;
                 if (indentLevel == 0) {
                     currentID   = paramName;
-                    rawID       = null;
                     previousIDs = [];
                 }
                 else if (indentLevel > currentLevel) {
-                    previousIDs[currentID] = indentLevel;
+                    previousIDs.push([currentID, currentLevel]);
                     currentID = getSerializeRegexp(rows[i-1].id);
                 }
                 else if (indentLevel < currentLevel) {
-                    for (var key in previousIDs) if (previousIDs.hasOwnProperty(key)) {
-                        if (previousIDs[key] == indentLevel)
-                            currentID        = key;
-                        if (previousIDs[key] >= currentLevel)
-                            previousIDs[key] = 0;
+                    for (var h = 0; h < previousIDs.length; h++) {
+                        if (previousIDs[h][1] == indentLevel)
+                            currentID        = previousIDs[h][0];
+                        if (previousIDs[h][1] >= currentLevel)
+                            previousIDs[h][1] = 0;
                     }
                 }
                 currentLevel = indentLevel;
+
                 if (!$.isArray(data[currentID]))
                     data[currentID] = [];
                 rowID = getSerializeRegexp(rows[i].id);
                 if (rowID)
                     data[currentID].push(rowID);
-
             }
             else {
                 rowID = getSerializeRegexp(rows[i].id);
-                if (rowID)
+                if (rowID) {
                     data[currentID].push(rowID);
+                    currentID = rowID;
+                }
             }
         }
         return data;
