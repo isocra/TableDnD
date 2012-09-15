@@ -93,7 +93,7 @@ if (hasTouch) {
     });
 }
 
-jQuery.tableDnD = {
+window.jQuery.tableDnD = {
     /** Keep hold of the current table being dragged */
     currentTable : null,
     /** Keep hold of the current drag object if any */
@@ -523,7 +523,7 @@ jQuery.tableDnD = {
     }
 };
 
-jQuery.fn.extend(
+window.jQuery.fn.extend(
     {
         tableDnD             : jQuery.tableDnD.build,
         tableDnDUpdate       : jQuery.tableDnD.updateTables,
