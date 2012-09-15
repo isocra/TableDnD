@@ -118,6 +118,8 @@ jQuery.tableDnD = {
                 onDrop: null,
                 onDragStart: null,
                 scrollAmount: 5,
+                /** Sensitivity setting will throttle the trigger rate for movement detection */
+                sensitivity: 10,
                 /** Hierarchy level to support parent child. 0 switches this functionality off */
                 hierarchyLevel: 0,
                 /** Automatic clean-up to ensure relationship integrity */
@@ -320,13 +322,19 @@ jQuery.tableDnD = {
     },
 
     findDragDirection: function (x,y) {
+        xMin = jQuery.tableDnD.oldX - jQuery.tableDnD.currentTable.tableDnDConfig.sensitivity;
+        xMax = jQuery.tableDnD.oldX + jQuery.tableDnD.currentTable.tableDnDConfig.sensitivity;
+        yMin = jQuery.tableDnD.oldY - jQuery.tableDnD.currentTable.tableDnDConfig.sensitivity;
+        yMax = jQuery.tableDnD.oldY + jQuery.tableDnD.currentTable.tableDnDConfig.sensitivity;
         var moving = {
-            horizontal: x == jQuery.tableDnD.oldX ? 0 : x > jQuery.tableDnD.oldX ? -1 : 1,
-            vertical  : y == jQuery.tableDnD.oldY ? 0 : y > jQuery.tableDnD.oldY ? -1 : 1
+            horizontal: x >= xMin && x <= xMax ? 0 : x > jQuery.tableDnD.oldX ? -1 : 1,
+            vertical  : y >= yMin && y <= yMax ? 0 : y > jQuery.tableDnD.oldY ? -1 : 1
         };
         // update the old value
-        jQuery.tableDnD.oldX = x;
-        jQuery.tableDnD.oldY = y;
+        if (moving.horizontal != 0)
+            jQuery.tableDnD.oldX = x;
+        if (moving.vertical != 0)
+            jQuery.tableDnD.oldY = y;
 
         return moving;
     },
