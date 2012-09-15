@@ -313,7 +313,6 @@ jQuery.tableDnD = {
                 } else if (0 > moving.horizontal && currentLevel < config.hierarchyLevel) {
                     if ($(currentRow).prev().find('div.indent').length >= currentLevel) {
                         $(currentRow).children(':first').prepend('<div class="indent">&nbsp;</div>');
-                        currentLevel++;
                     }
                 }
             }
