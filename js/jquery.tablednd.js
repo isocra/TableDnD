@@ -246,6 +246,7 @@ jQuery.tableDnD = {
     },
 
     mousemove: function(ev) {
+        ev.preventDefault();
         if (jQuery.tableDnD.dragObject == null) {
             return;
         }
@@ -377,6 +378,7 @@ jQuery.tableDnD = {
     },
 
     mouseup: function(e) {
+        e.preventDefault();
         if (jQuery.tableDnD.currentTable && jQuery.tableDnD.dragObject) {
             // Unbind the event handlers
             jQuery(document)
