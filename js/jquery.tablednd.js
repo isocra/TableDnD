@@ -171,12 +171,20 @@ jQuery.tableDnD = {
             });
         }
     },
-
+    hashItChanged: function(value) {
+        var rows = jQuery.tableDnD.currentTable.rows;
+        return $.map(rows, function (val) {
+            return $.map(($(val).find('div.indent').length+val.id).split(''), function (v) {
+                return v.charCodeAt(0).toString(16).toUpperCase();
+            }).join('');
+        }).join('');
+    },
     initialiseDrag: function(dragObject, table, target, evnt, config) {
         jQuery.tableDnD.dragObject = dragObject;
         jQuery.tableDnD.currentTable = table;
         jQuery.tableDnD.mouseOffset = jQuery.tableDnD.getMouseOffset(target, evnt);
-        jQuery.tableDnD.originalOrder = jQuery.tableDnD.serialize();
+        jQuery.tableDnD.originalOrder =  jQuery.tableDnD.hashItChanged();
+
         // Now we need to capture the mouse up and mouse move event
         // We can use bind so that we don't interfere with other event handlers
         jQuery(document)
@@ -411,8 +419,8 @@ jQuery.tableDnD = {
                 jQuery(droppedRow).css(config.onDropStyle);
             }
             jQuery.tableDnD.dragObject = null;
-            var newOrder = jQuery.tableDnD.serialize();
-            if (config.onDrop && (jQuery.tableDnD.originalOrder != newOrder)) {
+
+            if (config.onDrop && $.tableDnD.originalOrder != $.tableDnD.hashItChanged()) {
                 // Call the onDrop method if there is one
                 config.onDrop(jQuery.tableDnD.currentTable, droppedRow);
             }
