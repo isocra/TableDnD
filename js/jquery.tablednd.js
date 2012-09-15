@@ -169,7 +169,7 @@ window.jQuery.tableDnD = {
         }
     },
     hashItChanged: function() {
-        var rows = $.tableDnD.currentTable.rows;
+        var rows = this.currentTable.rows;
         return $.map(rows, function (val) {
             return $.map(($(val).find('div.indent').length+val.id).split(''), function (v) {
                 return v.charCodeAt(0).toString(16).toUpperCase();
@@ -177,16 +177,16 @@ window.jQuery.tableDnD = {
         }).join('');
     },
     initialiseDrag: function(dragObject, table, target, evnt, config) {
-        $.tableDnD.dragObject    = dragObject;
-        $.tableDnD.currentTable  = table;
-        $.tableDnD.mouseOffset   = $.tableDnD.getMouseOffset(target, evnt);
-        $.tableDnD.originalOrder =  $.tableDnD.hashItChanged();
+        this.dragObject    = dragObject;
+        this.currentTable  = table;
+        this.mouseOffset   = this.getMouseOffset(target, evnt);
+        this.originalOrder = this.hashItChanged();
 
         // Now we need to capture the mouse up and mouse move event
         // We can use bind so that we don't interfere with other event handlers
         $(document)
-                .bind(moveEvent, $.tableDnD.mousemove)
-                .bind(endEvent, $.tableDnD.mouseup);
+                .bind(moveEvent, this.mousemove)
+                .bind(endEvent, this.mouseup);
 
         // Call the onDragStart method if there is one
         if (config.onDragStart)
@@ -339,9 +339,9 @@ window.jQuery.tableDnD = {
         return false;
     },
     findDragDirection: function (x,y) {
-        var sensitivity = $.tableDnD.currentTable.tableDnDConfig.sensitivity,
-            oldX        = $.tableDnD.oldX,
-            oldY        = $.tableDnD.oldY,
+        var sensitivity = this.currentTable.tableDnDConfig.sensitivity,
+            oldX        = this.oldX,
+            oldY        = this.oldY,
             xMin        = oldX - sensitivity,
             xMax        = oldX + sensitivity,
             yMin        = oldY - sensitivity,
@@ -353,17 +353,17 @@ window.jQuery.tableDnD = {
 
         // update the old value
         if (moving.horizontal != 0)
-            $.tableDnD.oldX    = x;
+            this.oldX    = x;
         if (moving.vertical   != 0)
-            $.tableDnD.oldY    = y;
+            this.oldY    = y;
 
         return moving;
     },
     /** We're only worried about the y position really, because we can only move rows up and down */
     findDropTargetRow: function(draggedRow, y) {
         var rowHeight = 0,
-            rows      = $.tableDnD.currentTable.rows,
-            config    = $.tableDnD.currentTable.tableDnDConfig,
+            rows      = this.currentTable.rows,
+            config    = this.currentTable.tableDnDConfig,
             rowY      = 0,
             row       = null;
 
@@ -435,17 +435,17 @@ window.jQuery.tableDnD = {
         }
     },
     jsonize: function(pretify) {
-        var table = $.tableDnD.currentTable;
+        var table = this.currentTable;
         if (pretify)
             return JSON.stringify(
-                $.tableDnD.tableData(table),
+                this.tableData(table),
                 null,
                 table.tableDnDConfig.jsonPretifySeparator
             );
-        return JSON.stringify($.tableDnD.tableData(table));
+        return JSON.stringify(this.tableData(table));
     },
     serialize: function() {
-        return $.param($.tableDnD.tableData($.tableDnD.currentTable));
+        return $.param(this.tableData(this.currentTable));
     },
     serializeTable: function(table) {
         var result = "";
@@ -465,7 +465,7 @@ window.jQuery.tableDnD = {
         var result = [];
         $('table').each(function() {
             if (this.id)
-                result.push($.param($.tableDnD.tableData(this)));
+                result.push($.param(this.tableData(this)));
         });
         return result.join('&');
     },
@@ -481,7 +481,7 @@ window.jQuery.tableDnD = {
             rows;
 
         if (!table)
-            table = $.tableDnD.currentTable;
+            table = this.currentTable;
         if (!table||!table.id)
             return {error: { code: 500, message: "Not a volid table, no serializable unique id provided."}};
 
