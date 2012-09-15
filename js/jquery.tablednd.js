@@ -78,7 +78,7 @@
  * Version 0.6: 2011-12-02 Added support for touch devices
  * Version 0.7  2012-04-09 Now works with jQuery 1.7 and supports touch, tidied up tabs and spaces
  */
-(function ($) {
+!function ($) {
 // Determine if this is a touch device
 var hasTouch = 'ontouchstart' in document.documentElement,
         startEvent = hasTouch ? 'touchstart' : 'mousedown',
@@ -533,4 +533,4 @@ jQuery.fn.extend(
     }
 );
 
-})(jQuery);
+}(window.jQuery);
