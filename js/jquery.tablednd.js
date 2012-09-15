@@ -87,11 +87,10 @@ var hasTouch   = 'ontouchstart' in document.documentElement,
 
 // If we're on a touch device, then wire up the events
 // see http://stackoverflow.com/a/8456194/1316086
-if (hasTouch) {
+if (hasTouch)
     $.each("touchstart touchmove touchend".split(" "), function(i, name) {
         $.event.fixHooks[name] = $.event.mouseHooks;
     });
-}
 
 window.jQuery.tableDnD = {
     /** Keep hold of the current table being dragged */
@@ -145,22 +144,21 @@ window.jQuery.tableDnD = {
 
         if (config.dragHandle) {
             // We only need to add the event to the specified cells
-            var cells = $(table.tableDnDConfig.dragHandle, table);
-            cells.each(function() {
+            $(table.tableDnDConfig.dragHandle, table).each(function() {
                 // The cell is bound to "this"
                 $(this).bind(startEvent, function(ev) {
                     $.tableDnD.initialiseDrag($(this).parents('tr')[0], table, this, ev, config);
                     return false;
                 });
-            })
-        } else {
+            });
+        }
+        else {
             // For backwards compatibility, we add the event to the whole row
-            var rows = $("tr", table); // get all the rows as a wrapped set
-            rows.each(function() {
+            // get all the rows as a wrapped set
+            $(table.rows).each(function() {
                 // Iterate through each row, the row is bound to "this"
-                var row = $(this);
-                if (! row.hasClass("nodrag")) {
-                    row.bind(startEvent, function(ev) {
+                if (! $(this).hasClass("nodrag")) {
+                    $(this).bind(startEvent, function(ev) {
                         if (ev.target.tagName == "TD") {
                             $.tableDnD.initialiseDrag(this, table, this, ev, config);
                             return false;
@@ -170,7 +168,7 @@ window.jQuery.tableDnD = {
             });
         }
     },
-    hashItChanged: function(value) {
+    hashItChanged: function() {
         var rows = $.tableDnD.currentTable.rows;
         return $.map(rows, function (val) {
             return $.map(($(val).find('div.indent').length+val.id).split(''), function (v) {
@@ -189,24 +187,26 @@ window.jQuery.tableDnD = {
         $(document)
                 .bind(moveEvent, $.tableDnD.mousemove)
                 .bind(endEvent, $.tableDnD.mouseup);
-        if (config.onDragStart) {
-            // Call the onDragStart method if there is one
+
+        // Call the onDragStart method if there is one
+        if (config.onDragStart)
             config.onDragStart(table, target);
-        }
     },
     updateTables: function() {
         this.each(function() {
             // this is now bound to each matching table
-            if (this.tableDnDConfig) {
+            if (this.tableDnDConfig)
                 $.tableDnD.makeDraggable(this);
-            }
-        })
+        });
     },
     /** Get the mouse coordinates from the event (allowing for browser differences) */
-    mouseCoords: function(ev){
-        if(ev.pageX || ev.pageY){
-            return {x:ev.pageX, y:ev.pageY};
-        }
+    mouseCoords: function(ev) {
+        if(ev.pageX || ev.pageY)
+            return {
+                x: ev.pageX,
+                y: ev.pageY
+            };
+
         return {
             x: ev.clientX + document.body.scrollLeft - document.body.clientLeft,
             y: ev.clientY + document.body.scrollTop  - document.body.clientTop
@@ -230,19 +230,18 @@ window.jQuery.tableDnD = {
     },
     /** Get the position of an element by going up the DOM tree and adding up all the offsets */
     getPosition: function(e){
-        /** Safari fix -- thanks to Luis Chato for this! */
-        if (e.offsetHeight == 0) {
-            /** Safari 2 doesn't correctly grab the offsetTop of a table row
-             this is detailed here:
-             http://jacob.peargrove.com/blog/2006/technical/table-row-offsettop-bug-in-safari/
-             the solution is likewise noted there, grab the offset of a table cell in the row - the firstChild.
-             note that firefox will return a text node as a first child, so designing a more thorough
-             solution may need to take that into account, for now this seems to work in firefox, safari, ie */
         var left = 0,
             top  = 0;
 
+        // Safari fix -- thanks to Luis Chato for this!
+        // Safari 2 doesn't correctly grab the offsetTop of a table row
+        // this is detailed here:
+        // http://jacob.peargrove.com/blog/2006/technical/table-row-offsettop-bug-in-safari/
+        // the solution is likewise noted there, grab the offset of a table cell in the row - the firstChild.
+        // note that firefox will return a text node as a first child, so designing a more thorough
+        // solution may need to take that into account, for now this seems to work in firefox, safari, ie
+        if (e.offsetHeight == 0)
             e = e.firstChild; // a table cell
-        }
 
         while (e.offsetParent) {
             left += e.offsetLeft;
@@ -271,35 +270,15 @@ window.jQuery.tableDnD = {
             y;
 
         ev.preventDefault();
-        if ($.tableDnD.dragObject == null) {
-            return;
-        }
-        if (ev.type == 'touchmove') {
-            // prevent touch device screen scrolling
+
+        if ($.tableDnD.dragObject == null)
+            return null;
+
+        // prevent touch device screen scrolling
+        if (ev.type == 'touchmove')
             event.preventDefault();
-        }
 
-        if (document.all) {
-            // Windows version
-            //yOffset=document.body.scrollTop;
-            if (typeof document.compatMode != 'undefined' &&
-                    document.compatMode != 'BackCompat') {
-                yOffset = document.documentElement.scrollTop;
-            }
-            else if (typeof document.body != 'undefined') {
-                yOffset=document.body.scrollTop;
-            }
-        }
-
-        if (mousePos.y-yOffset < config.scrollAmount) {
-            window.scrollBy(0, -config.scrollAmount);
-        } else {
-            var windowHeight = window.innerHeight ? window.innerHeight
-                    : document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight;
-            if (windowHeight-(mousePos.y-yOffset) < config.scrollAmount) {
-                window.scrollBy(0, config.scrollAmount);
-            }
-        }
+        mousePos = $.tableDnD.mouseCoords(ev);
         x = mousePos.x - $.tableDnD.mouseOffset.x;
         y = mousePos.y - $.tableDnD.mouseOffset.y;
         windowHeight = window.innerHeight
@@ -309,41 +288,53 @@ window.jQuery.tableDnD = {
             : document.body.clientHeight;
 
         // auto scroll the window
+        // Windows version
+        // yOffset=document.body.scrollTop;
+        if (document.all)
+            if (typeof document.compatMode != 'undefined'
+                && document.compatMode != 'BackCompat')
+                    yOffset = document.documentElement.scrollTop;
+            else if (typeof document.body != 'undefined')
+                yOffset = document.body.scrollTop;
+
+        if (mousePos.y-yOffset < config.scrollAmount)
+            window.scrollBy(0, - config.scrollAmount);
+        else if (windowHeight - (mousePos.y - yOffset) < config.scrollAmount)
+            window.scrollBy(0, config.scrollAmount);
 
         // update the style to show we're dragging
-        if (config.onDragClass) {
+        if (config.onDragClass)
             dragObj.addClass(config.onDragClass);
-        } else {
+        else
             dragObj.css(config.onDragStyle);
-        }
 
-        if (0 != moving.vertical) {
         currentRow = $.tableDnD.findDropTargetRow(dragObj, y);
 
         moving = $.tableDnD.findDragDirection(x, y);
+        if (0 != moving.vertical
             // If we're over a row then move the dragged row to there so that the user sees the
             // effect dynamically
-            if (currentRow && $.tableDnD.dragObject != currentRow
-                && $.tableDnD.dragObject.parentNode == currentRow.parentNode) {
-                if (0 > moving.vertical) {
+            && currentRow
+            && $.tableDnD.dragObject != currentRow
+            && $.tableDnD.dragObject.parentNode == currentRow.parentNode)
+                if (0 > moving.vertical)
                     $.tableDnD.dragObject.parentNode.insertBefore($.tableDnD.dragObject, currentRow.nextSibling);
-                } else if (0 < moving.vertical) {
+                else if (0 < moving.vertical)
                     $.tableDnD.dragObject.parentNode.insertBefore($.tableDnD.dragObject, currentRow);
-                }
-            }
-        }
-        if (config.hierarchyLevel && 0 != moving.horizontal) {
+        if (config.hierarchyLevel
+            && 0 != moving.horizontal
             // We only care if moving left or right on the current row
-            if (currentRow && $.tableDnD.dragObject == currentRow) {
-                var currentLevel = $(currentRow).find('div.indent').length;
-                if (0 < moving.horizontal && currentLevel > 0) {
+            && currentRow
+            && $.tableDnD.dragObject == currentRow) {
+
+                currentLevel = $(currentRow).find('div.indent').length;
+
+                if (0 < moving.horizontal && currentLevel > 0)
                     $(currentRow).find('div.indent').first().remove();
-                } else if (0 > moving.horizontal && currentLevel < config.hierarchyLevel) {
-                    if ($(currentRow).prev().find('div.indent').length >= currentLevel) {
+                else if (0 > moving.horizontal && currentLevel < config.hierarchyLevel
+                    && $(currentRow).prev().find('div.indent').length >= currentLevel)
                         $(currentRow).children(':first').prepend('<div class="indent">&nbsp;</div>');
-                    }
-                }
-            }
+
         }
         return false;
     },
@@ -385,27 +376,17 @@ window.jQuery.tableDnD = {
                 rowHeight = parseInt(row.firstChild.offsetHeight) / 2;
             }
             // Because we always have to insert before, we need to offset the height a bit
-            if ((y > rowY - rowHeight) && (y < (rowY + rowHeight))) {
+            if (y > (rowY - rowHeight) && y < (rowY + rowHeight))
                 // that's the row we're over
                 // If it's the same as the current row, ignore it
-                if (row == draggedRow) {return null;}
-                if (config.onAllowDrop) {
-                    if (config.onAllowDrop(draggedRow, row)) {
-                        return row;
-                    } else {
-                        return null;
-                    }
-                } else {
+                if (row == draggedRow
+                    || (config.onAllowDrop
+                    && !config.onAllowDrop(draggedRow, row))
                     // If a row has nodrop class, then don't allow dropping (inspired by John Tarr and Famic)
-                    var nodrop = $(row).hasClass("nodrop");
-                    if (! nodrop) {
-                        return row;
-                    } else {
+                    || $(row).hasClass("nodrop"))
                         return null;
-                    }
-                }
-                return row;
-            }
+                else
+                    return row;
         }
         return null;
     },
@@ -416,7 +397,8 @@ window.jQuery.tableDnD = {
             myLevel     = 0;
 
         e.preventDefault();
-        if ($.tableDnD.currentTable && $.tableDnD.dragObject) {
+
+        if ($.tableDnD.currentTable && droppedRow) {
             // Unbind the event handlers
             $(document)
                 .unbind(moveEvent, $.tableDnD.mousemove)
@@ -441,17 +423,14 @@ window.jQuery.tableDnD = {
             }
             // If we have a dragObject, then we need to release it,
             // The row will already have been moved to the right place so we just reset stuff
-            if (config.onDragClass) {
+            if (config.onDragClass)
                 $(droppedRow).removeClass(config.onDragClass);
-            } else {
+            else
                 $(droppedRow).css(config.onDropStyle);
-            }
             $.tableDnD.dragObject = null;
-
-            if (config.onDrop && $.tableDnD.originalOrder != $.tableDnD.hashItChanged()) {
-                // Call the onDrop method if there is one
+            // Call the onDrop method if there is one
+            if (config.onDrop && $.tableDnD.originalOrder != $.tableDnD.hashItChanged())
                 config.onDrop($.tableDnD.currentTable, droppedRow);
-            }
             $.tableDnD.currentTable = null; // let go of the table too
         }
     },
@@ -547,10 +526,8 @@ window.jQuery.tableDnD = {
             }
             else {
                 rowID = getSerializeRegexp(rows[i].id);
-                if (rowID) {
+                if (rowID)
                     data[currentID].push(rowID);
-                    currentID = rowID;
-                }
             }
         }
         return data;
