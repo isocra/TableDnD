@@ -121,10 +121,14 @@ window.jQuery.tableDnD = {
                 sensitivity: 10,
                 /** Hierarchy level to support parent child. 0 switches this functionality off */
                 hierarchyLevel: 0,
+                /** The html artifact to prepend the first cell with as indentation */
+                indentArtifact: '<div class="indent">&nbsp;</div>',
+                /** Automatically adjust width of first cell */
+                autoWidthAdjust: true,
                 /** Automatic clean-up to ensure relationship integrity */
                 autoCleanRelations: true,
                 /** Specify a number (4) as number of spaces or any indent string for JSON.stringify */
-                jsonPretifySeparator: '\t\t\t',
+                jsonPretifySeparator: '\t',
 
                 serializeRegexp: /[^\-]*$/, // The regular expression to use to trim row IDs
                 serializeParamName: false, // If you want to specify another parameter name instead of the table ID
@@ -133,10 +137,54 @@ window.jQuery.tableDnD = {
 
             // Now make the rows draggable
             $.tableDnD.makeDraggable(this);
+            // Prepare hierarchy support
+            this.tableDnDConfig.hierarchyLevel
+                && $.tableDnD.makeIndented(this);
         });
 
         // Don't break the chain
         return this;
+    },
+    makeIndented: function (table) {
+        var config = table.tableDnDConfig,
+            rows = table.rows,
+            firstCell = $(rows).first().find('td:first')[0],
+            indentLevel = 0,
+            cellWidth = 0,
+            longestCell,
+            tableStyle;
+
+        if ($(table).hasClass('indtd'))
+            return null;
+
+        tableStyle = $(table).addClass('indtd').attr('style');
+        $(table).css({whiteSpace: "nowrap"});
+
+        for (var w = 0; w < rows.length; w++) {
+            console.log(config.hierarchyLevel, w, $(rows[w]).find('td:first').text().length);
+            if (cellWidth < $(rows[w]).find('td:first').text().length) {
+                cellWidth = $(rows[w]).find('td:first').text().length;
+                longestCell = w;
+            }
+        }
+        $(firstCell).css({width: 'auto'});
+        for (w = 0; w < config.hierarchyLevel; w++)
+            $(rows[longestCell]).find('td:first').prepend(config.indentArtifact);
+        $(firstCell).css({width: firstCell.offsetWidth});
+        tableStyle && $(table).css(tableStyle);
+
+        for (w = 0; w < config.hierarchyLevel; w++)
+            $(rows[longestCell]).find('td:first').children(':first').remove();
+
+        config.hierarchyLevel
+            && $(rows).each(function () {
+                indentLevel = $(this).data('level') || 0;
+                indentLevel <= config.hierarchyLevel
+                    && $(this).data('level', indentLevel)
+                    || $(this).data('level', 0);
+                for (var i = 0; i < $(this).data('level'); i++)
+                    $(this).find('td:first').prepend(config.indentArtifact);
+            });
     },
     /** This function makes all the rows on the table draggable apart from those marked as "NoDrag" */
     makeDraggable: function(table) {
