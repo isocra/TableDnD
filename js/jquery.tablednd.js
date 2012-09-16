@@ -87,8 +87,8 @@ var hasTouch   = 'ontouchstart' in document.documentElement,
 
 // If we're on a touch device, then wire up the events
 // see http://stackoverflow.com/a/8456194/1316086
-if (hasTouch)
-    $.each("touchstart touchmove touchend".split(" "), function(i, name) {
+hasTouch
+    && $.each("touchstart touchmove touchend".split(" "), function(i, name) {
         $.event.fixHooks[name] = $.event.mouseHooks;
     });
 
@@ -190,55 +190,50 @@ window.jQuery.tableDnD = {
     makeDraggable: function(table) {
         var config = table.tableDnDConfig;
 
-        if (config.dragHandle) {
+        config.dragHandle
             // We only need to add the event to the specified cells
-            $(table.tableDnDConfig.dragHandle, table).each(function() {
+            && $(config.dragHandle, table).each(function() {
                 // The cell is bound to "this"
-                $(this).bind(startEvent, function(ev) {
-                    $.tableDnD.initialiseDrag($(this).parents('tr')[0], table, this, ev, config);
+                $(this).bind(startEvent, function(e) {
+                    $.tableDnD.initialiseDrag($(this).parents('tr')[0], table, this, e, config);
                     return false;
                 });
-            });
-        }
-        else {
+            })
             // For backwards compatibility, we add the event to the whole row
             // get all the rows as a wrapped set
-            $(table.rows).each(function() {
+            || $(table.rows).each(function() {
                 // Iterate through each row, the row is bound to "this"
                 if (! $(this).hasClass("nodrag")) {
-                    $(this).bind(startEvent, function(ev) {
-                        if (ev.target.tagName == "TD") {
-                            $.tableDnD.initialiseDrag(this, table, this, ev, config);
+                    $(this).bind(startEvent, function(e) {
+                        if (e.target.tagName == "TD") {
+                            $.tableDnD.initialiseDrag(this, table, this, e, config);
                             return false;
                         }
                     }).css("cursor", "move"); // Store the tableDnD object
                 }
             });
-        }
     },
-    hashItChanged: function() {
+    currentOrder: function() {
         var rows = this.currentTable.rows;
         return $.map(rows, function (val) {
-            return $.map(($(val).find('div.indent').length+val.id).split(''), function (v) {
-                return v.charCodeAt(0).toString(16).toUpperCase();
-            }).join('');
+            return ($(val).data('level') + val.id).replace(/\s/g, '');
         }).join('');
     },
-    initialiseDrag: function(dragObject, table, target, evnt, config) {
+    initialiseDrag: function(dragObject, table, target, e, config) {
         this.dragObject    = dragObject;
         this.currentTable  = table;
-        this.mouseOffset   = this.getMouseOffset(target, evnt);
-        this.originalOrder = this.hashItChanged();
+        this.mouseOffset   = this.getMouseOffset(target, e);
+        this.originalOrder = this.currentOrder();
 
         // Now we need to capture the mouse up and mouse move event
         // We can use bind so that we don't interfere with other event handlers
         $(document)
-                .bind(moveEvent, this.mousemove)
-                .bind(endEvent, this.mouseup);
+            .bind(moveEvent, this.mousemove)
+            .bind(endEvent, this.mouseup);
 
         // Call the onDragStart method if there is one
-        if (config.onDragStart)
-            config.onDragStart(table, target);
+        config.onDragStart
+            && config.onDragStart(table, target);
     },
     updateTables: function() {
         this.each(function() {
@@ -512,13 +507,13 @@ window.jQuery.tableDnD = {
     serializeTables: function() {
         var result = [];
         $('table').each(function() {
-            if (this.id)
-                result.push($.param(this.tableData(this)));
+            this.id && result.push($.param(this.tableData(this)));
         });
         return result.join('&');
     },
     tableData: function (table) {
-        var previousIDs  = [],
+        var config = table.tableDnDConfig,
+            previousIDs  = [],
             currentLevel = 0,
             indentLevel  = 0,
             rowID        = null,
@@ -530,24 +525,31 @@ window.jQuery.tableDnD = {
 
         if (!table)
             table = this.currentTable;
-        if (!table||!table.id)
-            return {error: { code: 500, message: "Not a volid table, no serializable unique id provided."}};
+        if (!table || !table.id || !table.rows || !table.rows.length)
+            return {error: { code: 500, message: "Not a valid table, no serializable unique id provided."}};
 
-        rows      = table.rows;
-        paramName = table.tableDnDConfig.serializeParamName || table.id;
+        rows      = config.autoCleanRelations
+                        && table.rows
+                        || $.makeArray(table.rows);
+        paramName = config.serializeParamName || table.id;
         currentID = paramName;
 
         getSerializeRegexp = function (rowId) {
-            if (rowId && table.tableDnDConfig && table.tableDnDConfig.serializeRegexp)
-                return rowId.match(table.tableDnDConfig.serializeRegexp)[0];
+            if (rowId && config && config.serializeRegexp)
+                return rowId.match(config.serializeRegexp)[0];
             return rowId;
         };
 
         data[currentID] = [];
+        !config.autoCleanRelations
+            && $(rows[0]).data('level')
+            && rows.unshift({id: 'undefined'});
+
+
 
         for (var i=0; i < rows.length; i++) {
-            if (table.tableDnDConfig.hierarchyLevel) {
-                indentLevel = $(rows[i]).children(':first').find('div.indent').length;
+            if (config.hierarchyLevel) {
+                indentLevel = $(rows[i]).data('level') || 0;
                 if (indentLevel == 0) {
                     currentID   = paramName;
                     previousIDs = [];
@@ -569,13 +571,11 @@ window.jQuery.tableDnD = {
                 if (!$.isArray(data[currentID]))
                     data[currentID] = [];
                 rowID = getSerializeRegexp(rows[i].id);
-                if (rowID)
-                    data[currentID].push(rowID);
+                rowID && data[currentID].push(rowID);
             }
             else {
                 rowID = getSerializeRegexp(rows[i].id);
-                if (rowID)
-                    data[currentID].push(rowID);
+                rowID && data[currentID].push(rowID);
             }
         }
         return data;
@@ -586,9 +586,9 @@ window.jQuery.fn.extend(
     {
         tableDnD             : $.tableDnD.build,
         tableDnDUpdate       : $.tableDnD.updateTables,
-        tableDnDSerialize    : $.tableDnD.serialize,
+        tableDnDSerialize    : $.proxy($.tableDnD.serialize, $.tableDnD),
         tableDnDSerializeAll : $.tableDnD.serializeTables,
-        tableDnDData         : $.tableDnD.tableData
+        tableDnDData         : $.proxy($.tableDnD.tableData, $.tableDnD)
     }
 );
 
