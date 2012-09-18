@@ -78,6 +78,7 @@
  * Version 0.6: 2011-12-02 Added support for touch devices
  * Version 0.7  2012-04-09 Now works with jQuery 1.7 and supports touch, tidied up tabs and spaces
  */
+(function ($) {
 // Determine if this is a touch device
 var hasTouch = 'ontouchstart' in document.documentElement,
         startEvent = hasTouch ? 'touchstart' : 'mousedown',
@@ -90,7 +91,6 @@ if (hasTouch) {
     $.each("touchstart touchmove touchend".split(" "), function(i, name) {
         jQuery.event.fixHooks[name] = jQuery.event.mouseHooks;
     });
-    alert("has Touch");
 }
 
 jQuery.tableDnD = {
@@ -288,10 +288,9 @@ jQuery.tableDnD = {
             // effect dynamically
             var currentRow = jQuery.tableDnD.findDropTargetRow(dragObj, y);
             if (currentRow) {
-                // TODO worry about what happens when there are multiple TBODIES
-                if (movingDown && jQuery.tableDnD.dragObject != currentRow) {
+                if (movingDown && jQuery.tableDnD.dragObject != currentRow && (jQuery.tableDnD.dragObject.parentNode == currentRow.parentNode)) {
                     jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow.nextSibling);
-                } else if (! movingDown && jQuery.tableDnD.dragObject != currentRow) {
+                } else if (! movingDown && jQuery.tableDnD.dragObject != currentRow && (jQuery.tableDnD.dragObject.parentNode == currentRow.parentNode)) {
                     jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow);
                 }
             }
@@ -362,6 +361,33 @@ jQuery.tableDnD = {
             jQuery.tableDnD.currentTable = null; // let go of the table too
         }
     },
+    
+    jsonize: function() {
+        if (jQuery.tableDnD.currentTable) {
+            return jQuery.tableDnD.jsonizeTable(jQuery.tableDnD.currentTable);
+        } else {
+            return "Error: No Table id set, you need to set an id on your table and every row";
+        }
+    },
+    
+    jsonizeTable: function(table) {
+        var result = "{";
+        var tableId = table.id;
+        var rows = table.rows;
+        result += '"' + tableId + '" : [';
+        for (var i=0; i<rows.length; i++) {
+            
+            var rowId = rows[i].id;
+            if (rowId && rowId && table.tableDnDConfig && table.tableDnDConfig.serializeRegexp) {
+                rowId = rowId.match(table.tableDnDConfig.serializeRegexp)[0];
+            }
+
+            result += '"' + rowId + '"';
+            if (i<rows.length-1) result += ",";
+        }
+        result += "]}";
+        return result;
+    },
 
     serialize: function() {
         if (jQuery.tableDnD.currentTable) {
@@ -373,16 +399,15 @@ jQuery.tableDnD = {
 
     serializeTable: function(table) {
         var result = "";
-        var tableId = table.id;
+        var paramName = table.tableDnDConfig.serializeParamName || table.id;
         var rows = table.rows;
         for (var i=0; i<rows.length; i++) {
             if (result.length > 0) result += "&";
             var rowId = rows[i].id;
-            if (rowId && rowId && table.tableDnDConfig && table.tableDnDConfig.serializeRegexp) {
+            if (rowId && table.tableDnDConfig && table.tableDnDConfig.serializeRegexp) {
                 rowId = rowId.match(table.tableDnDConfig.serializeRegexp)[0];
+                result += tableId + '[]=' + rowId;
             }
-
-            result += tableId + '[]=' + rowId;
         }
         return result;
     },
@@ -405,3 +430,4 @@ jQuery.fn.extend(
         tableDnDSerialize: jQuery.tableDnD.serializeTables
     }
 );
+})(jQuery);
