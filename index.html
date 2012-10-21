@@ -17,9 +17,13 @@ at plugins.jquery.com</p>
 
 <h2>How do I use it?</h2>
 <ol>
-	<li>Download <a href="http://jquery.com">Download jQuery</a> (version 1.2 or above, currently tested with 1.7.1), then the <a href="/articles/jquery.tablednd.js.zip">TableDnD plugin</a> (current version 0.6).</li>
-	<li>Reference both scripts in your HTML page in the normal way.</li>
-	<li>In true jQuery style, the typical way to initialise the tabes is in the <code>$(document).ready</code> function. Use a selector to select your table and then call <code>tableDnD()</code>. You can optionally specify a set of properties (described below).</li>
+	<li>Since TableDnD is a jquery pligin you will need to include jquery in your page first.
+    <p>No need for any downloads simply reference <a href="https://developers.google.com/speed/libraries/devguide#jquery">jQuery from the Google CDN</a> (Content Distribution Network) At the time of this writing the latest release was 1.8.2.
+    All scripts are included at the bottom of the page, to facilitate quicker rendering of the HTML for more responsive pages.
+    The following is the way we are linking to jQuery in the examples and this method can be recommended for use in your implementations too.</p>
+    <pre class="prettyprint">&lt;script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"&gt;&lt;/script&gt;</pre></li>
+    <li>We will also need a copy of the <a href="/articles/jquery.tablednd.js.zip">TableDnD plugin</a> (current version 0.9) which you can reference in the normal fashion, anywhere after jQuery.</li>
+	<li>In true jQuery style, the typical way to initialise the tabes is in the <code class="prettyprint">$(document).ready</code> code black function. Use a selector to select your table and then call <code class="prettyprint">tableDnD()</code>. You can optionally specify a set of properties (described below).</li>
 </ol>
 <div class="tableDemo">
 <div id="debug" style="float:right;"></div>
