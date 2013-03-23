@@ -165,10 +165,12 @@ window.jQuery.tableDnD = {
                 autoCleanRelations: true,
                 /** Specify a number (4) as number of spaces or any indent string for JSON.stringify */
                 jsonPretifySeparator: '\t',
-
-                serializeRegexp: /[^\-]*$/, // The regular expression to use to trim row IDs
-                serializeParamName: false, // If you want to specify another parameter name instead of the table ID
-                dragHandle: null // If you give the name of a class here, then only Cells with this class will be draggable
+                /** The regular expression to use to trim row IDs */
+                serializeRegexp: /[^\-]*$/,
+                /** If you want to specify another parameter name instead of the table ID */
+                serializeParamName: false,
+                /** If you give the name of a class here, then only Cells with this class will be draggable */
+                dragHandle: null
             }, options || {});
 
             // Now make the rows draggable
@@ -197,7 +199,6 @@ window.jQuery.tableDnD = {
         $(table).css({whiteSpace: "nowrap"});
 
         for (var w = 0; w < rows.length; w++) {
-            console.log(config.hierarchyLevel, w, $(rows[w]).find('td:first').text().length);
             if (cellWidth < $(rows[w]).find('td:first').text().length) {
                 cellWidth = $(rows[w]).find('td:first').text().length;
                 longestCell = w;
