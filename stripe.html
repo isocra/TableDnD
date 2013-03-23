@@ -4,55 +4,6 @@
 <head>
     <title>Table Drag and Drop jQuery plugin</title>
     <link rel="stylesheet" href="tablednd.css" type="text/css"/>
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/jquery.tablednd.js"></script>
-    <script type="text/javascript">
-$(document).ready(function() {
-	alert("Here I am");
-	// Initialise the first table (as before)
-	$("#table-1").tableDnD();
-	// Make a nice striped effect on the table
-	$("#table-2 tr:even").addClass("alt");
-	// Initialise the second table specifying a dragClass and an onDrop function that will display an alert
-	$("#table-2").tableDnD({
-	    onDragClass: "myDragClass",
-	    onDrop: function(table, row) {
-            var rows = table.tBodies[0].rows;
-            var debugStr = "Row dropped was "+row.id+". New order: ";
-            for (var i=0; i<rows.length; i++) {
-                debugStr += rows[i].id+" ";
-            }
-	        $("#debugArea").html(debugStr);
-	    },
-		onDragStart: function(table, row) {
-			$("#debugArea").html("Started dragging row "+row.id);
-		}
-	});
-
-	$('#table-3').tableDnD({
-	    onDrop: function(table, row) {
-	        alert("Result of $.tableDnD.serialise() is "+$.tableDnD.serialize());
-		    $('#AjaxResult').load("server/ajaxTest.php?"+$.tableDnD.serialize());
-        }
-	});
-
-	//$('#table-4').tableDnD(); // no options currently
-	$('#table-4 tr:even').css('background', '#ecf6fc');
-
-    $('#table-5').tableDnD({
-        onDrop: function(table, row) {
-            alert($('#table-5').tableDnDSerialize());
-        },
-        dragHandle: "dragHandle"
-    });
-
-    $("#table-5 tr").hover(function() {
-          $(this.cells[0]).addClass('showDragHandle');
-    }, function() {
-          $(this.cells[0]).removeClass('showDragHandle');
-    });
-});
-</script>
 </head>
 <body>
 <div id="page">
@@ -290,5 +241,54 @@ you enter it using the jQuery <code>hover</code> function as follows:</p>
     <tr><td>0.5</td><td>2008-06-04</td><td>Changed so that if you specify a dragHandle class it doesn't make the whole row<br/>draggable<br/>Improved the serialize method to use a default (and settable) regular expression.<br/>Added tableDnDupate() and tableDnDSerialize() to be called when you are outside the table</td></tr>
 </table>
 </div>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.tablednd.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        alert("Here I am");
+        // Initialise the first table (as before)
+        $("#table-1").tableDnD();
+        // Make a nice striped effect on the table
+        $("#table-2 tr:even").addClass("alt");
+        // Initialise the second table specifying a dragClass and an onDrop function that will display an alert
+        $("#table-2").tableDnD({
+            onDragClass: "myDragClass",
+            onDrop: function(table, row) {
+                var rows = table.tBodies[0].rows;
+                var debugStr = "Row dropped was "+row.id+". New order: ";
+                for (var i=0; i<rows.length; i++) {
+                    debugStr += rows[i].id+" ";
+                }
+                $("#debugArea").html(debugStr);
+            },
+            onDragStart: function(table, row) {
+                $("#debugArea").html("Started dragging row "+row.id);
+            }
+        });
+
+        $('#table-3').tableDnD({
+            onDrop: function(table, row) {
+                alert("Result of $.tableDnD.serialise() is "+$.tableDnD.serialize());
+                $('#AjaxResult').load("server/ajaxTest.php?"+$.tableDnD.serialize());
+            }
+        });
+
+        //$('#table-4').tableDnD(); // no options currently
+        $('#table-4 tr:even').css('background', '#ecf6fc');
+
+        $('#table-5').tableDnD({
+            onDrop: function(table, row) {
+                alert($('#table-5').tableDnDSerialize());
+            },
+            dragHandle: "dragHandle"
+        });
+
+        $("#table-5 tr").hover(function() {
+            $(this.cells[0]).addClass('showDragHandle');
+        }, function() {
+            $(this.cells[0]).removeClass('showDragHandle');
+        });
+    });
+</script>
 </body>
 </html>
