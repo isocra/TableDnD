@@ -92,6 +92,42 @@ hasTouch
         $.event.fixHooks[name] = $.event.mouseHooks;
     });
 
+
+$(document).ready(function () {
+    function parseStyle(css) {
+        var objMap = {},
+            parts = css.match(/([^;:]+)/g) || [];
+        while (parts.length)
+            objMap[parts.shift()] = parts.shift().trim();
+
+        return objMap;
+    }
+    $('table').each(function () {
+        if ($(this).data('table') == 'dnd') {
+
+            $(this).tableDnD({
+                onDragStyle: $(this).data('ondragstyle') && parseStyle($(this).data('ondragstyle')) || null,
+                onDropStyle: $(this).data('ondropstyle') && parseStyle($(this).data('ondropstyle')) || null,
+                onDragClass: $(this).data('ondragclass') == undefined && "tDnD_whileDrag" || $(this).data('ondragclass'),
+                onDrop: $(this).data('ondrop') && new Function('table', 'row', $(this).data('ondrop')), // 'return eval("'+$(this).data('ondrop')+'");') || null,
+                onDragStart: $(this).data('ondragstart') && new Function('table', 'row' ,$(this).data('ondragstart')), // 'return eval("'+$(this).data('ondragstart')+'");') || null,
+                scrollAmount: $(this).data('scrollamount') || 5,
+                sensitivity: $(this).data('sensitivity') || 10,
+                hierarchyLevel: $(this).data('hierarchylevel') || 0,
+                indentArtifact: $(this).data('indentartifact') || '<div class="indent">&nbsp;</div>',
+                autoWidthAdjust: $(this).data('autowidthadjust') || true,
+                autoCleanRelations: $(this).data('autocleanrelations') || true,
+                jsonPretifySeparator: $(this).data('jsonpretifyseparator') || '\t',
+                serializeRegexp: $(this).data('serializeregexp') && new RegExp($(this).data('serializeregexp')) || /[^\-]*$/,
+                serializeParamName: $(this).data('serializeparamname') || false,
+                dragHandle: $(this).data('draghandle') || null
+            });
+        }
+
+
+    });
+});
+
 window.jQuery.tableDnD = {
     /** Keep hold of the current table being dragged */
     currentTable: null,
