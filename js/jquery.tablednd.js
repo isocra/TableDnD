@@ -170,7 +170,7 @@ window.jQuery.tableDnD = {
         $(firstCell).css({width: 'auto'});
         for (w = 0; w < config.hierarchyLevel; w++)
             $(rows[longestCell]).find('td:first').prepend(config.indentArtifact);
-        $(firstCell).css({width: firstCell.offsetWidth});
+        firstCell && $(firstCell).css({width: firstCell.offsetWidth});
         tableStyle && $(table).css(tableStyle);
 
         for (w = 0; w < config.hierarchyLevel; w++)
@@ -185,6 +185,8 @@ window.jQuery.tableDnD = {
                 for (var i = 0; i < $(this).data('level'); i++)
                     $(this).find('td:first').prepend(config.indentArtifact);
             });
+
+        return this;
     },
     /** This function makes all the rows on the table draggable apart from those marked as "NoDrag" */
     makeDraggable: function(table) {
@@ -318,10 +320,10 @@ window.jQuery.tableDnD = {
             else if (typeof document.body != 'undefined')
                 yOffset = document.body.scrollTop;
 
-        if (mousePos.y - yOffset < config.scrollAmount)
-            window.scrollBy(0, - config.scrollAmount);
-        else if (windowHeight - (mousePos.y - yOffset) < config.scrollAmount)
-            window.scrollBy(0, config.scrollAmount);
+        mousePos.y - yOffset < config.scrollAmount
+            && window.scrollBy(0, - config.scrollAmount)
+        || windowHeight - (mousePos.y - yOffset) < config.scrollAmount
+            && window.scrollBy(0, config.scrollAmount);
 
     },
     moveVerticle: function (moving, currentRow) {
@@ -332,10 +334,10 @@ window.jQuery.tableDnD = {
             && currentRow
             && this.dragObject != currentRow
             && this.dragObject.parentNode == currentRow.parentNode)
-            if (0 > moving.vertical)
-                this.dragObject.parentNode.insertBefore(this.dragObject, currentRow.nextSibling);
-            else if (0 < moving.vertical)
-                this.dragObject.parentNode.insertBefore(this.dragObject, currentRow);
+            0 > moving.vertical
+                && this.dragObject.parentNode.insertBefore(this.dragObject, currentRow.nextSibling)
+            || 0 < moving.vertical
+                && this.dragObject.parentNode.insertBefore(this.dragObject, currentRow);
 
     },
     moveHorizontal: function (moving, currentRow) {
