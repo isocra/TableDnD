@@ -406,7 +406,7 @@ jQuery.tableDnD = {
             var rowId = rows[i].id;
             if (rowId && table.tableDnDConfig && table.tableDnDConfig.serializeRegexp) {
                 rowId = rowId.match(table.tableDnDConfig.serializeRegexp)[0];
-                result += tableId + '[]=' + rowId;
+                result += paramName + '[]=' + rowId;
             }
         }
         return result;
