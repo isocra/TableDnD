@@ -7,16 +7,6 @@
 	<meta name="generator" content="TextMate http://macromates.com/">
 	<meta name="author" content="DenisH">
     <link rel="stylesheet" href="tablednd.css" type="text/css"/>
-	<script src="js/jquery.js" type="text/javascript"></script>
-	<script src="js/jquery.tablednd.js" type="text/javascript"></script>
-	<script type="text/javascript" charset="utf-8">
-$(document).ready(function() {
-	// Initialise the table
-	$("#table-1").tableDnD();
-	// Make a nice striped effect on the table
-	$("#table-1 tr:even").addClass("alt");
-})		
-	</script>
 </head>
 <body>
 
@@ -35,5 +25,15 @@ $(document).ready(function() {
 
 	<p><input type="submit" value="Continue &rarr;"></p>
 </form>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="js/jquery.tablednd.js" type="text/javascript"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        // Initialise the table
+        $("#table-1").tableDnD();
+        // Make a nice striped effect on the table
+        $("#table-1 tr:even").addClass("alt");
+    })
+</script>
 </body>
 </html>
