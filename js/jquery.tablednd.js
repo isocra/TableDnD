@@ -81,9 +81,15 @@
 !function ($, window, document, undefined) {
 // Determine if this is a touch device
 var hasTouch   = 'ontouchstart' in document.documentElement,
-    startEvent = hasTouch ? 'touchstart' : 'mousedown',
-    moveEvent  = hasTouch ? 'touchmove'  : 'mousemove',
-    endEvent   = hasTouch ? 'touchend'   : 'mouseup';
+    startEvent = ['mousedown'],
+    moveEvent  = ['mousemove'],
+    endEvent   = ['mouseup'];
+
+if (hasTouch) {
+    startEvent.push('touchstart');
+    moveEvent.push('touchmove');
+    endEvent.push('touchend');
+}
 
 // If we're on a touch device, then wire up the events
 // see http://stackoverflow.com/a/8456194/1316086
@@ -233,22 +239,26 @@ window.jQuery.tableDnD = {
             // We only need to add the event to the specified cells
             && $(config.dragHandle, table).each(function() {
                 // The cell is bound to "this"
-                $(this).bind(startEvent, function(e) {
-                    $.tableDnD.initialiseDrag($(this).parents('tr')[0], table, this, e, config);
-                    return false;
-                });
+                for (var i = 0; i < startEvent.length; i++) {
+                    $(this).bind(startEvent[i], function(e) {
+                        $.tableDnD.initialiseDrag($(this).parents('tr')[0], table, this, e, config);
+                        return false;
+                    });
+                }
             })
             // For backwards compatibility, we add the event to the whole row
             // get all the rows as a wrapped set
             || $(table.rows).each(function() {
                 // Iterate through each row, the row is bound to "this"
                 if (! $(this).hasClass("nodrag")) {
-                    $(this).bind(startEvent, function(e) {
-                        if (e.target.tagName == "TD") {
-                            $.tableDnD.initialiseDrag(this, table, this, e, config);
-                            return false;
-                        }
-                    }).css("cursor", "move"); // Store the tableDnD object
+                    for (var i = 0; i < startEvent.length; i++) {
+                        $(this).bind(startEvent[i], function(e) {
+                            if (e.target.tagName == "TD") {
+                                $.tableDnD.initialiseDrag(this, table, this, e, config);
+                                return false;
+                            }
+                        }).css("cursor", "move"); // Store the tableDnD object
+                    }
                 }
             });
     },
@@ -266,9 +276,13 @@ window.jQuery.tableDnD = {
 
         // Now we need to capture the mouse up and mouse move event
         // We can use bind so that we don't interfere with other event handlers
-        $(document)
-            .bind(moveEvent, this.mousemove)
-            .bind(endEvent, this.mouseup);
+        var doc = $(document)
+        for (var i = 0; i < moveEvent.length; i++) {
+            doc.bind(moveEvent[i], this.mousemove)
+        }
+        for (var i = 0; i < endEvent.length; i++) {
+            doc.bind(endEvent[i], this.mouseup);
+        }
 
         // Call the onDragStart method if there is one
         config.onDragStart
@@ -502,9 +516,13 @@ window.jQuery.tableDnD = {
             return null;
 
         // Unbind the event handlers
-        $(document)
-            .unbind(moveEvent, this.mousemove)
-            .unbind(endEvent,  this.mouseup);
+        var doc = $(document)
+        for (var i = 0; i < moveEvent.length; i++) {
+            doc.unbind(moveEvent[i], this.mousemove)
+        }
+        for (var i = 0; i < endEvent.length; i++) {
+            doc.unbind(endEvent[i],  this.mouseup);
+        }
 
         config.hierarchyLevel
             && config.autoCleanRelations
