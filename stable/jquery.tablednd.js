@@ -1,7 +1,7 @@
 /**
  * TableDnD plug-in for JQuery, allows you to drag and drop table rows
  * You can set up various options to control how the system will work
- * Copyright © Denis Howlett <denish@isocra.com>
+ * Copyright (c) Denis Howlett <denish@isocra.com>
  * Licensed like jQuery, see http://docs.jquery.com/License.
  *
  * Configuration options:
@@ -105,7 +105,7 @@ jQuery.tableDnD = {
         for (var i=0; i<rows.length; i++) {
             // To make non-draggable rows, add the nodrag class (eg for Category and Header rows) 
 			// inspired by John Tarr and Famic
-            var nodrag = $(rows[i]).hasClass("nodrag");
+            var nodrag = jQuery(rows[i]).hasClass("nodrag");
             if (! nodrag) { //There is no NoDnD attribute on rows I want to drag
                 jQuery(rows[i]).mousedown(function(ev) {
                     if (ev.target.tagName == "TD") {
@@ -258,7 +258,7 @@ jQuery.tableDnD = {
                     }
                 } else {
 					// If a row has nodrop class, then don't allow dropping (inspired by John Tarr and Famic)
-                    var nodrop = $(row).hasClass("nodrop");
+                    var nodrop = jQuery(row).hasClass("nodrop");
                     if (! nodrop) {
                         return row;
                     } else {
