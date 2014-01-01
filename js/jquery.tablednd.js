@@ -481,7 +481,7 @@ window.jQuery.tableDnD = {
             if (y > (rowY - rowHeight) && y < (rowY + rowHeight))
                 // that's the row we're over
                 // If it's the same as the current row, ignore it
-                if (row == draggedRow
+                if (draggedRow.is(row)
                     || (config.onAllowDrop
                     && !config.onAllowDrop(draggedRow, row))
                     // If a row has nodrop class, then don't allow dropping (inspired by John Tarr and Famic)
