@@ -128,7 +128,7 @@ $(document).ready(function () {
     });
 });
 
-window.jQuery.tableDnD = {
+jQuery.tableDnD = {
     /** Keep hold of the current table being dragged */
     currentTable: null,
     /** Keep hold of the current drag object if any */
@@ -651,7 +651,7 @@ window.jQuery.tableDnD = {
     }
 };
 
-window.jQuery.fn.extend(
+jQuery.fn.extend(
     {
         tableDnD             : $.tableDnD.build,
         tableDnDUpdate       : $.tableDnD.updateTables,
@@ -661,4 +661,4 @@ window.jQuery.fn.extend(
     }
 );
 
-}(window.jQuery, window, window.document);
+}(jQuery, window, window.document);
