@@ -283,6 +283,12 @@ window.jQuery.tableDnD = {
     },
     /** Get the mouse coordinates from the event (allowing for browser differences) */
     mouseCoords: function(e) {
+        if (hasTouch)
+            return {
+                x: event.changedTouches[0].clientX,
+                y: event.changedTouches[0].clientY
+            };
+        
         if(e.pageX || e.pageY)
             return {
                 x: e.pageX,
