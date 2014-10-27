@@ -79,18 +79,26 @@
  * Version 0.7  2012-04-09 Now works with jQuery 1.7 and supports touch, tidied up tabs and spaces
  */
 !function ($, window, document, undefined) {
-// Determine if this is a touch device
-var hasTouch   = 'ontouchstart' in document.documentElement,
-    startEvent = hasTouch ? 'touchstart' : 'mousedown',
-    moveEvent  = hasTouch ? 'touchmove'  : 'mousemove',
-    endEvent   = hasTouch ? 'touchend'   : 'mouseup';
+var startEvent = 'touchstart mousedown',
+    moveEvent  = 'touchmove mousemove',
+    endEvent   = 'touchend mouseup';
 
-// If we're on a touch device, then wire up the events
-// see http://stackoverflow.com/a/8456194/1316086
-hasTouch
-    && $.each("touchstart touchmove touchend".split(" "), function(i, name) {
-        $.event.fixHooks[name] = $.event.mouseHooks;
-    });
+// In a TouchEvent, all the coordinates are in the TouchLists, not
+// directly in the event. And of course there can be multiple points of
+// contact, but let's not try to handle that... just assume there's one
+// and copy the coordinates to the event so it resembles a MouseEvent.
+$.each("touchstart touchmove touchend".split(" "), function(i, name) {
+    $.event.fixHooks[name] = {
+        props: "changedTouches targetTouches touches".split(" "),
+        filter: function( event, original ) {
+            if(original.touches[0])
+                $.each("clientX clientY pageX pageY screenX screenY".split(" "), function(i, coord) {
+                    event[coord] = original.touches[0][coord];
+                });
+            return event;
+        }
+    }
+});
 
 
 $(document).ready(function () {
