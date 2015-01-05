@@ -499,13 +499,13 @@ jQuery.tableDnD = {
         return null;
     },
     processMouseup: function() {
+        if (!this.currentTable || !droppedRow)
+            return null;
+
         var config      = this.currentTable.tableDnDConfig,
             droppedRow  = this.dragObject,
             parentLevel = 0,
             myLevel     = 0;
-
-        if (!this.currentTable || !droppedRow)
-            return null;
 
         // Unbind the event handlers
         $(document)
