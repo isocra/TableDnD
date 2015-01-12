@@ -499,7 +499,7 @@ jQuery.tableDnD = {
         return null;
     },
     processMouseup: function() {
-        if (!this.currentTable || !droppedRow)
+        if (!this.currentTable || !this.dragObject)
             return null;
 
         var config      = this.currentTable.tableDnDConfig,
