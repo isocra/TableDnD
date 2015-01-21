@@ -249,6 +249,8 @@ jQuery.tableDnD = {
                             return false;
                         }
                     }).css("cursor", "move"); // Store the tableDnD object
+                } else {
+                    $(this).css("cursor", ""); // Remove the cursor if we don't have the nodrag class
                 }
             });
     },
