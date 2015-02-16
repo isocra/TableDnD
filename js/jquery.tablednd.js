@@ -120,7 +120,8 @@ $(document).ready(function () {
                 jsonPretifySeparator: $(this).data('jsonpretifyseparator') || '\t',
                 serializeRegexp: $(this).data('serializeregexp') && new RegExp($(this).data('serializeregexp')) || /[^\-]*$/,
                 serializeParamName: $(this).data('serializeparamname') || false,
-                dragHandle: $(this).data('draghandle') || null
+                dragHandle: $(this).data('draghandle') || null,
+                calculateMouseOffset: $(this).data('calculatemouseoffset') || true
             });
         }
 
@@ -170,7 +171,9 @@ jQuery.tableDnD = {
                 /** If you want to specify another parameter name instead of the table ID */
                 serializeParamName: false,
                 /** If you give the name of a class here, then only Cells with this class will be draggable */
-                dragHandle: null
+                dragHandle: null,
+                /** If you don't want to calculate mouse offset between beginning of table row and current mouse position, pass false */
+                calculateMouseOffset: true
             }, options || {});
 
             // Now make the rows draggable
@@ -261,7 +264,7 @@ jQuery.tableDnD = {
     initialiseDrag: function(dragObject, table, target, e, config) {
         this.dragObject    = dragObject;
         this.currentTable  = table;
-        this.mouseOffset   = this.getMouseOffset(target, e);
+        this.mouseOffset   = config.calculateMouseOffset ? this.getMouseOffset(target, e) : { x: 0, y: 0 };
         this.originalOrder = this.currentOrder();
 
         // Now we need to capture the mouse up and mouse move event
@@ -478,13 +481,17 @@ jQuery.tableDnD = {
         for (var i = 0; i < rows.length; i++) {
             row       = rows[i];
             rowY      = this.getPosition(row).y;
-            rowHeight = parseInt(row.offsetHeight) / 2;
+            rowHeight = config.calculateMouseOffset ? parseInt(row.offsetHeight) / 2 : parseInt(row.offsetHeight);
             if (row.offsetHeight == 0) {
                 rowY      = this.getPosition(row.firstChild).y;
-                rowHeight = parseInt(row.firstChild.offsetHeight) / 2;
+                rowHeight = config.calculateMouseOffset ? parseInt(row.firstChild.offsetHeight) / 2 : parseInt(row.firstChild.offsetHeight);
             }
-            // Because we always have to insert before, we need to offset the height a bit
-            if (y > (rowY - rowHeight) && y < (rowY + rowHeight))
+            // If we use offset between element and mouse - we always have to insert before, we need to offset the height a bit
+            // otherwise - we want to check if mouse pointer is exactly over the row
+            var isMouseOverCurrentRow = config.calculateMouseOffset
+                ? (y > (rowY - rowHeight) && y < (rowY + rowHeight))
+                : (y > (rowY) && y < (rowY + rowHeight));
+            if (isMouseOverCurrentRow)
                 // that's the row we're over
                 // If it's the same as the current row, ignore it
                 if (draggedRow.is(row)
