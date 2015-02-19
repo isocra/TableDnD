@@ -12,18 +12,22 @@
 <p>This page contains documentation and tests for the TableDnD jQuery plug-in. For more information and
 to post comments, please go to <a href="http://www.isocra.com/2008/02/table-drag-and-drop-jquery-plugin/">isocra.com</a>.
 </p>
-<p>If you have issues or bug reports, then you can post them at the <a href="http://plugins.jquery.com/project/issues/TableDnD">TableDnD plug page</a>
-at plugins.jquery.com</p>
+<p>If you have issues or bug reports, then you can post them at the <a href="https://github.com/isocra/TableDnD">TableDnD plug page</a>.</p>
 
 <h2>How do I use it?</h2>
 <ol>
 	<li>Since TableDnD is a jquery pligin you will need to include jquery in your page first.
-    <p>No need for any downloads simply reference <a href="https://developers.google.com/speed/libraries/devguide#jquery">jQuery from the Google CDN</a> (Content Distribution Network) At the time of this writing the latest release was 1.8.2.
+    <p>No need for any downloads simply reference <a href="https://developers.google.com/speed/libraries/devguide#jquery">jQuery from the Google CDN</a>
+        (Content Distribution Network)
     All scripts are included at the bottom of the page, to facilitate quicker rendering of the HTML for more responsive pages.
     The following is the way we are linking to jQuery in the examples and this method can be recommended for use in your implementations too.</p>
     <pre class="prettyprint">&lt;script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"&gt;&lt;/script&gt;</pre></li>
-    <li>We will also need a copy of the <a href="/articles/jquery.tablednd.js.zip">TableDnD plugin</a> (current version 0.9) which you can reference in the normal fashion, anywhere after jQuery.</li>
-	<li>In true jQuery style, the typical way to initialise the tabes is in the <code class="prettyprint">$(document).ready</code> code black function. Use a selector to select your table and then call <code class="prettyprint">tableDnD()</code>. You can optionally specify a set of properties (described below).</li>
+    <li>You will also need a copy of the <a href="https://github.com/isocra/TableDnD">TableDnD plugin</a> (current version 0.9) which you can reference in
+        the normal fashion, anywhere after jQuery.</li>
+	<li>In true jQuery style, the typical way to initialise the tabes is in the <code class="prettyprint">$(document).ready</code> code black function.
+        Use a selector to select your table and then call the following (You can optionally specify a set of properties (described below).
+        <pre class="prettyprint">tableDnD()</pre>
+    </li>
 </ol>
 
 <h2>A basic table</h2>
@@ -413,34 +417,8 @@ you enter it using the jQuery <code class="prettyprint">hover</code> function as
   <a class="toggle-json77" href="#">Hide JSON</a><div id="json77" class="result"></div>
 </div>
 
-<h2>Version History</h2>
-<table class="versionHistory">
-	<tr><td>0.2</td><td style="white-space: nowrap;">2008-02-20</td><td>First public release</td></tr>
-	<tr><td>0.3</td><td>2008-02-27</td><td>Added onDragStart option<br/>Made the scroll amount configurable (default is 5 as before)</td></tr>
-	<tr><td>0.4</td><td>2008-03-28</td><td>Fixed the scrollAmount so that if you set this to zero then it switches off this functionality<br/>Fixed the auto-scrolling in IE6 thanks to Phil<br/>Changed the NoDrop attribute to the class "nodrop" (so any row with this class won't allow dropping)<br/>Changed the NoDrag attribute to the class "nodrag" (so any row with this class can't be dragged)<br/>Added support for multiple TBODYs--though it's still not perfect<br/>Added onAllowDrop to allow the developer to customise this behaviour<br/>Added a serialize() method to return the order of the rows in a form suitable for POSTing back to the server</td></tr>
-    <tr><td>0.5</td><td>2008-06-04</td><td>Changed so that if you specify a dragHandle class it doesn't make the whole row<br/>draggable<br/>Improved the serialize method to use a default (and settable) regular expression.<br/>Added tableDnDupate() and tableDnDSerialize() to be called when you are outside the table</td></tr>
-    <tr><td>0.6</td><td>2011-12-02</td><td>Support for touch devices</td></tr>
-    <tr><td>0.7</td><td>2012-04-09</td><td>DenisH - Code cleanup, </td></tr>
-    <tr><td>0.8</td><td>2012-09-13</td><td>Minified version of 0.8dev release - LightDot</td></tr>
-    <tr><td>0.9</td><td>2012-10-21</td><td>Changelog from different contributors:
-        <table style="width: 700px; margin-top: 10px; font-size: 90%;" cellpadding="0" cellspacing="0">
-          <tr><td style="white-space: nowrap;">2012-01-24</td><td>Daniel Bøndergaard</td><td>Don't include blank ids in serialization</td></tr>
-          <tr><td>2012-05-08</td><td>Matt Snider</td><td style="white-space: nowrap;">Major refactor and optimization, dispersed codebase merge, , Hierarchy DnD</td></tr>
-          <tr><td>2012-06-04</td><td>Vyacheslav Salakhutdinov</td><td>Remove alert with "has Touch"</td></tr>
-          <tr><td>2012-06-11</td><td>AndreZteel</td><td>Major refactor and optimization, dispersed codebase merge, , Hierarchy DnD</td></tr>
-          <tr><td>2012-06-11</td><td>Daniel Franz</td><td>Global footprint reduction by limiting variable scope</td></tr>
-          <tr><td>2012-06-07</td><td>Andrew Nagy</td><td>Added jsonize for JSON Serialization.</td></tr>
-          <tr><td>2012-07-12</td><td>Adam Hodges</td><td>Multiple &lt;tbody&gt; issues fixed</td></tr>
-          <tr><td>2012-09-16</td><td>nickl-</td><td>Major refactor and optimization including code reduction, code cleanup and normalization, dispersed codebase merge, Hierarchy DnD, jQuery object modifiers, improved scope reduction, style enhancements, improved event handling and state awareness, motion sensitivity thresholds and direction detection, relation integrity, refactored data serialization, </td></tr>
-          <tr><td>2012-10-21</td><td>nickl-</td><td>JQuery via CDN, documentation updates, Added code pretifier and other style adjustments</td></tr>
-          <tr><td>2012-03-23</td><td>nickl-</td><td>Added auto init support and ability to configure DnD via data attributes, improved data integrity and common points of failure, optimization and style clean-up. Added license and attribution.</td></tr>
-        </table>
-    </td></tr>
-</table>
-</div>
-
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-<script type="text/javascript" src="//google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="https://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
 <script type="text/javascript" src="js/jquery.tablednd.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {

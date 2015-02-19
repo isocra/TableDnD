@@ -1,4 +1,0 @@
-h1. TableDnD
-
-Documentation will go here, for now, go to "Isocra's TableDnD Blog posting":http://www.isocra.com/2008/02/table-drag-and-drop-jquery-plugin/
-

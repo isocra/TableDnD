@@ -81,9 +81,9 @@
 !function ($, window, document, undefined) {
 // Determine if this is a touch device
 var hasTouch   = 'ontouchstart' in document.documentElement,
-    startEvent = 'touchstart mousedown',
-    moveEvent  = 'touchmove mousemove',
-    endEvent   = 'touchend mouseup';
+    startEvent = hasTouch ? 'touchstart' : 'mousedown',
+    moveEvent  = hasTouch ? 'touchmove'  : 'mousemove',
+    endEvent   = hasTouch ? 'touchend'   : 'mouseup';
 
 // If we're on a touch device, then wire up the events
 // see http://stackoverflow.com/a/8456194/1316086
@@ -283,7 +283,7 @@ jQuery.tableDnD = {
     },
     /** Get the mouse coordinates from the event (allowing for browser differences) */
     mouseCoords: function(e) {
-        if (event.changedTouches)
+        if (hasTouch)
             return {
                 x: event.changedTouches[0].clientX,
                 y: event.changedTouches[0].clientY
@@ -499,13 +499,13 @@ jQuery.tableDnD = {
         return null;
     },
     processMouseup: function() {
-        if (!this.currentTable || !this.dragObject)
-            return null;
-
         var config      = this.currentTable.tableDnDConfig,
             droppedRow  = this.dragObject,
             parentLevel = 0,
             myLevel     = 0;
+
+        if (!this.currentTable || !droppedRow)
+            return null;
 
         // Unbind the event handlers
         $(document)
