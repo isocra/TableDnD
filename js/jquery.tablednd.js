@@ -611,9 +611,11 @@ jQuery.tableDnD = {
 
         if (!table)
             table = this.currentTable;
-        if (!table || !table.id || !table.rows || !table.rows.length)
-            return {error: { code: 500, message: "Not a valid table, no serializable unique id provided."}};
-
+        if (!table || !table.rows || !table.rows.length)
+            return {error: { code: 500, message: "Not a valid table."}};
+        if (!table.id && !config.serializeParamName)
+            return {error: { code: 500, message: "No serializable unique id provided."}};
+        
         rows      = config.autoCleanRelations
                         && table.rows
                         || $.makeArray(table.rows);
