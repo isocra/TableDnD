@@ -1,4 +1,5 @@
 # TableDnD
+[![CDNJS version](https://img.shields.io/cdnjs/v/TableDnD.svg)](https://cdnjs.com/libraries/TableDnD)
 
 ## Installation
 
