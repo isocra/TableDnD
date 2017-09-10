@@ -1,5 +1,5 @@
 {
-    "name": "TableDnD",
+    "name": "tablednd",
     "version": "0.9.1",
     "main": [
         "./js/jquery.tablednd.js"
