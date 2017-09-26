@@ -131,6 +131,8 @@ jQuery.tableDnD = {
     dragObject: null,
     /** The current mouse offset */
     mouseOffset: null,
+    /** mouse position where started dragging */
+    oldMousePosition: null,
     /** Remember the old value of X and Y so that we don't do too much processing */
     oldX: 0,
     oldY: 0,
@@ -262,6 +264,7 @@ jQuery.tableDnD = {
         this.currentTable  = table;
         this.mouseOffset   = this.getMouseOffset(target, e);
         this.originalOrder = this.currentOrder();
+        this.oldMousePosition = this.mouseCoords(e);
 
         // Now we need to capture the mouse up and mouse move event
         // We can use bind so that we don't interfere with other event handlers
@@ -436,12 +439,8 @@ jQuery.tableDnD = {
 
         // auto scroll the window
         $.tableDnD.autoScroll(mousePos);
-
-        currentRow = $.tableDnD.findDropTargetRow(dragObj, y);
-        moving = $.tableDnD.findDragDirection(x, y);
-
-        $.tableDnD.moveVerticle(moving, currentRow);
-        $.tableDnD.moveHorizontal(moving, currentRow);
+        
+        dragObj.css("transform", "translate(" + (mousePos.x - $.tableDnD.oldMousePosition.x) + "px, " + (mousePos.y - $.tableDnD.oldMousePosition.y) + "px)");
 
         return false;
     },
@@ -497,7 +496,7 @@ jQuery.tableDnD = {
         }
         return null;
     },
-    processMouseup: function() {
+    processMouseup: function(e) {
         if (!this.currentTable || !this.dragObject)
             return null;
 
@@ -505,6 +504,15 @@ jQuery.tableDnD = {
             droppedRow  = this.dragObject,
             parentLevel = 0,
             myLevel     = 0;
+        
+        //actually move the element
+        var mousePos = $.tableDnD.mouseCoords(e);
+        var x = mousePos.x - $.tableDnD.mouseOffset.x;
+        var y = mousePos.y - $.tableDnD.mouseOffset.y;
+        var currentRow = $.tableDnD.findDropTargetRow($(droppedRow), y);
+        var moving = $.tableDnD.findDragDirection(x, y);
+        $.tableDnD.moveVerticle(moving, currentRow);
+        $.tableDnD.moveHorizontal(moving, currentRow);
 
         // Unbind the event handlers
         $(document)
@@ -547,12 +555,14 @@ jQuery.tableDnD = {
         // Call the onDragStop method if there is one
         config.onDragStop
             && config.onDragStop(this.currentTable, droppedRow);
+        
+        $(droppedRow).css("transform", "none");
 
         this.currentTable = null; // let go of the table too
     },
     mouseup: function(e) {
         e && e.preventDefault();
-        $.tableDnD.processMouseup();
+        $.tableDnD.processMouseup(e);
         return false;
     },
     jsonize: function(pretify) {
