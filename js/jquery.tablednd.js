@@ -265,6 +265,12 @@ jQuery.tableDnD = {
         this.mouseOffset   = this.getMouseOffset(target, e);
         this.originalOrder = this.currentOrder();
         this.oldMousePosition = this.mouseCoords(e);
+        
+        //call "findDragDirection" to reset oldX and oldY vars
+        var mousePos = $.tableDnD.mouseCoords(e);
+        var x = mousePos.x - $.tableDnD.mouseOffset.x;
+        var y = mousePos.y - $.tableDnD.mouseOffset.y;
+        var moving = $.tableDnD.findDragDirection(x, y);
 
         // Now we need to capture the mouse up and mouse move event
         // We can use bind so that we don't interfere with other event handlers
