@@ -272,6 +272,10 @@ jQuery.tableDnD = {
         var y = mousePos.y - $.tableDnD.mouseOffset.y;
         var moving = $.tableDnD.findDragDirection(x, y);
 
+		//ie/edge workaround (it has a bug, transform not allowed for TR elements, but allowed for TD, still not fixed, see StackOverflow)
+		if (this.isIeOrEdge())
+			$(dragObject).css("display", "block");
+
         // Now we need to capture the mouse up and mouse move event
         // We can use bind so that we don't interfere with other event handlers
         $(document)
@@ -282,6 +286,10 @@ jQuery.tableDnD = {
         config.onDragStart
             && config.onDragStart(table, target);
     },
+	isIeOrEdge: function () {
+		var ua = window.navigator.userAgent;
+		return ua.indexOf('MSIE ') > -1 || ua.indexOf('Trident/') > -1 || ua.indexOf('Edge/') > -1;
+	},
     updateTables: function() {
         this.each(function() {
             // this is now bound to each matching table
@@ -562,7 +570,11 @@ jQuery.tableDnD = {
         config.onDragStop
             && config.onDragStop(this.currentTable, droppedRow);
         
-        $(droppedRow).css("transform", "none");
+		$(droppedRow).css("transform", "none");
+
+		//ie/edge workaround
+		if (this.isIeOrEdge())
+			$(droppedRow).css("display", "");
 
         this.currentTable = null; // let go of the table too
     },
