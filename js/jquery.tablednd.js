@@ -84,9 +84,9 @@
 !function ($, window, document, undefined) {
 // Determine if this is a touch device
 var hasTouch   = 'ontouchstart' in document.documentElement,
-    startEvent = 'touchstart mousedown',
-    moveEvent  = 'touchmove mousemove',
-    endEvent   = 'touchend mouseup';
+    startEvents = hasTouch ? ['touchstart','mousedown'] : ['mousedown'],
+    moveEvents  = hasTouch ? ['touchmove','mousemove']  : ['mousemove'],
+    endEvents   = hasTouch ? ['touchend','mouseup']   : ['mouseup'];
 
 $(document).ready(function () {
     function parseStyle(css) {
@@ -224,30 +224,37 @@ jQuery.tableDnD = {
     },
     /** This function makes all the rows on the table draggable apart from those marked as "NoDrag" */
     makeDraggable: function(table) {
-        var config = table.tableDnDConfig;
+        var config = table.tableDnDConfig,
+            cell, row;
 
         config.dragHandle
             // We only need to add the event to the specified cells
             && $(config.dragHandle, table).each(function() {
                 // The cell is bound to "this"
-                $(this).bind(startEvent, function(e) {
-                    $.tableDnD.initialiseDrag($(this).parents('tr')[0], table, this, e, config);
-                    return false;
+                cell = this;
+                $(startEvents).each(function(index, startEvent) {
+                    $(cell).bind(startEvent, function(e) {
+                        $.tableDnD.initialiseDrag($(this).parents('tr')[0], table, this, e, config);
+                        return false;
+                    });
                 });
             })
             // For backwards compatibility, we add the event to the whole row
             // get all the rows as a wrapped set
             || $(table.rows).each(function() {
                 // Iterate through each row, the row is bound to "this"
-                if (! $(this).hasClass("nodrag")) {
-                    $(this).bind(startEvent, function(e) {
-                        if (e.target.tagName == "TD") {
-                            $.tableDnD.initialiseDrag(this, table, this, e, config);
-                            return false;
-                        }
-                    }).css("cursor", "move"); // Store the tableDnD object
+                row = this;
+                if (! $(row).hasClass("nodrag")) {
+                    $(startEvents).each(function(index, startEvent) {
+                        $(row).bind(startEvent, function(e) {
+                            if (e.target.tagName == "TD") {
+                                $.tableDnD.initialiseDrag(this, table, this, e, config);
+                                return false;
+                            }
+                        }).css("cursor", "move"); // Store the tableDnD object
+                    });
                 } else {
-                    $(this).css("cursor", ""); // Remove the cursor if we don't have the nodrag class
+                    $(row).css("cursor", ""); // Remove the cursor if we don't have the nodrag class
                 }
             });
     },
@@ -258,6 +265,8 @@ jQuery.tableDnD = {
         }).join('');
     },
     initialiseDrag: function(dragObject, table, target, e, config) {
+        var me = this;
+
         this.dragObject    = dragObject;
         this.currentTable  = table;
         this.mouseOffset   = this.getMouseOffset(target, e);
@@ -265,9 +274,12 @@ jQuery.tableDnD = {
 
         // Now we need to capture the mouse up and mouse move event
         // We can use bind so that we don't interfere with other event handlers
-        $(document)
-            .bind(moveEvent, this.mousemove)
-            .bind(endEvent, this.mouseup);
+        $(moveEvents).each(function(index, moveEvent) {
+            $(document).bind(moveEvent, me.mousemove);
+        });
+        $(endEvents).each(function(index, endEvent) {
+            $(document).bind(endEvent, me.mouseup);
+        });
 
         // Call the onDragStart method if there is one
         config.onDragStart
@@ -504,12 +516,16 @@ jQuery.tableDnD = {
         var config      = this.currentTable.tableDnDConfig,
             droppedRow  = this.dragObject,
             parentLevel = 0,
-            myLevel     = 0;
+            myLevel     = 0,
+            me = this;
 
         // Unbind the event handlers
-        $(document)
-            .unbind(moveEvent, this.mousemove)
-            .unbind(endEvent,  this.mouseup);
+        $(moveEvents).each(function(index, moveEvent) {
+            $(document).unbind(moveEvent, me.mousemove);
+        });
+        $(endEvents).each(function(index, endEvent) {
+            $(document).unbind(endEvent, me.mouseup);
+        });
 
         config.hierarchyLevel
             && config.autoCleanRelations
