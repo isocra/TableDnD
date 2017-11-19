@@ -14,11 +14,11 @@ or
 bower install https://github.com/isocra/TableDnD.git
 ```
 Alternatively you can simply reference from CDNJS:
-```
+```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/TableDnD/0.9.1/jquery.tablednd.js" integrity="sha256-d3rtug+Hg1GZPB7Y/yTcRixO/wlI78+2m08tosoRn7A=" crossorigin="anonymous"></script>
 ```
 or
-```
+```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/TableDnD/0.9.1/jquery.tablednd.js" integrity="sha256-d3rtug+Hg1GZPB7Y/yTcRixO/wlI78+2m08tosoRn7A=" crossorigin="anonymous"></script>
 ```
 You'll also need to include [jQuery](https://jquery.com) before you include this plugin (so that jQuery is defined).
@@ -33,7 +33,7 @@ You'll also need to include [jQuery](https://jquery.com) before you include this
 
 Let's create a simple table. The HTML for the table is very straight forward (no Javascript, pure HTML, we haven't added `thead` or `tbody` elements, but it works find with these too):
 
-```
+```html
 <table id="table-1" cellspacing="0" cellpadding="2">
     <tr id="1"><td>1</td><td>One</td><td>some text</td></tr>
     <tr id="2"><td>2</td><td>Two</td><td>some text</td></tr>
@@ -44,7 +44,7 @@ Let's create a simple table. The HTML for the table is very straight forward (no
 </table>
 ```
 To add in the "draggability" all we need to do is add a line to the `$(document).ready(...)` function as follows:
-```
+```html
 <script type="text/javascript">
 $(document).ready(function() {
     // Initialise the table
