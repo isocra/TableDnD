@@ -61,93 +61,93 @@ You can specify the following properties when initialising the table as follows:
     });
 ```
 
-###autoCleanRelations
+### autoCleanRelations
 
 Automatically clean up relations between cells and rows etc., (default is `true`)
 
-###autoWidthAdjust
+### autoWidthAdjust
 
 Automatically adjust the width of the first cell (default is `true`)
 
-###dragHandle
+### dragHandle
 
 This is a jQuery mach string for one or more cells in each row that is draggable. If you
 specify this, then you are responsible for setting cursor: move in the CSS and only these cells
 will have the drag behaviour. If you do not specify a dragHandle, then you get the old behaviour where
 the whole row is draggable.
 
-###hierarchyLevel
+### hierarchyLevel
 
 Hierarchy level to support parent child. Default is `0` which switches this functionality off.
 
-###indentArtifact
+### indentArtifact
 
 The html artifact to prepend the first cell with as indentation, default `<div class="indent">&nbsp;</div>`
 
-###jsonPretifySeparator
+### jsonPretifySeparator
 
 Specify a number (4) as number of spaces or any indent string for use by `JSON.stringify`
 
-###onAllowDrop
+### onAllowDrop
 Pass a function that will be called as a row is over another row. If the function returns true, allow
 dropping on that row, otherwise not. The function takes 2 parameters: the dragged row and the row under
 the cursor. It returns a boolean: true allows the drop, false doesn't allow it.
 
-###onDragClass
+### onDragClass
 
 This class is added for the duration of the drag and then removed when the row is dropped. It is more
 flexible than using onDragStyle since it can be inherited by the row cells and other content. The default
 is class is tDnD_whileDrag. So to use the default, simply customise this CSS class in your
 stylesheet.
 
-###onDragStart
+### onDragStart
 
 Pass a function that will be called when the user starts dragging. The function takes 2 parameters: the
 table and the row which the user has started to drag.
 
-###onDragStop
+### onDragStop
 
 Pass a function that will be called when the user stops dragging regardless of if the rows have been
 rearranged. The function takes 2 parameters: the table and the row which the user was dragging.
 
-###onDragStyle
+### onDragStyle
 
 his is the style that is assigned to the row during drag. There are limitations to the styles that can be
 associated with a row (such as you can't assign a border--well you can, but it won't be
 displayed, so instead consider using `onDragClass`.) The CSS style to apply is specified as
 a map (as used in the jQuery `css(...)` function).
  
-###onDrop
+### onDrop
 
 Pass a function that will be called when the row is dropped. The function takes 2 parameters: the table
 and the row that was dropped. You can work out the new order of the rows by using
 table.rows.
 
-###onDropStyle
+### onDropStyle
 
 This is the style that is assigned to the row when it is dropped. As for onDragStyle, there are limitations
 to what you can do. Also this replaces the original style, so again consider using onDragClass which
 is simply added and then removed on drop.
  
-###scrollAmount
+### scrollAmount
 
 This is the number of pixels to scroll if the user moves the mouse cursor to the top or bottom of the
 window. The page should automatically scroll up or down as appropriate.
 
-###sensitivity
+### sensitivity
 
 The minimum mouse movement before a drag is triggered, default `10`
 
-###serializeParamName
+### serializeParamName
 
 If you want to specify another parameter name instead of the table ID, default is `false` i.e. use the table ID.
 
-###serializeRegexp
+### serializeRegexp
 
 Allows you to filter which rows are serialised and which aren't. If the row ID matches this regex, then include it,
 otherwise not. Default is `/[^\-]*$/`
 
-##Other ways to control behaviour
+## Other ways to control behaviour
 
 Add `class="nodrop"` to any rows for which you don't want to allow dropping, and `class="nodrag"` to any rows
 that you don't want to be draggable.
@@ -157,7 +157,7 @@ Inside the onDrop method you can also call $.tableDnD.serialize() this returns a
 an ID as must all the rows.
 
  
-##Other methods:
+## Other methods:
 
 `$("...").tableDnDUpdate()`
 Will update all the matching tables, that is it will reapply the mousedown method to the rows (or handle cells).
