@@ -1,0 +1,8 @@
+title: TableDnD
+description: jQuery plug-in to drag and drop rows in HTML tables
+google_analytics: UA-2007610-1
+show_downloads: true
+theme: jekyll-theme-minimal
+
+gems:
+  - jekyll-mentions
