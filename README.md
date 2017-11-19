@@ -6,10 +6,20 @@
 
 The easiest way to install this is using:
 
+`npm install tablednd`
+
+or
+
 `bower install https://github.com/isocra/TableDnD.git`
+
+---
+
+## NB This is work in progress, please do not install via NPM *YET*
+
+---
 
 This will install the TableDnD plugin into your bower components as well as installing [jQuery](http://jquery.com) which it depends on.
 
-Documentation will go here, for now, go to [Isocra's TableDnD Blog posting](http://www.isocra.com/2008/02/table-drag-and-drop-jquery-plugin/)
+Documentation can be found at [TableDnD](http://isocra.github.io/TableDnD/).
 
 You can also play and experiment with TableDnD using this [jsFiddle](http://jsfiddle.net/DenisHo/dxpLrcd9/embedded/result/) (it's not complete yet, the ajax callbacks don't work--not surprisingly--but it's still useful for testing and exploring).

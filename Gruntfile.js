@@ -17,6 +17,7 @@ module.exports = function(grunt) {
         options: {
           // '-W015': true,
           laxbreak: true,
+          expr: true,
           reporterOutput: ""
         },
         src: 'js/jquery.tablednd.js',
