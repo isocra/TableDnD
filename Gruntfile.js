@@ -13,15 +13,14 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
-      options: {
-        // options here to override JSHint defaults
-        globals: {
-          jQuery: true,
-          console: true,
-          module: true,
-          document: true
-        }
+      all: {
+        options: {
+          // '-W015': true,
+          laxbreak: true,
+          reporterOutput: ""
+        },
+        src: 'js/jquery.tablednd.js',
+        filter: 'isFile'
       }
     }
   });
