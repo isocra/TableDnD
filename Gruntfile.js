@@ -15,9 +15,6 @@ module.exports = function(grunt) {
     jshint: {
       all: {
         options: {
-          // '-W015': true,
-          laxbreak: true,
-          expr: true,
           reporterOutput: ""
         },
         src: 'js/jquery.tablednd.js',
