@@ -1,5 +1,7 @@
 {
   "laxbreak": true,
+  "expr": true,
+
   "globals": {
     "jQuery": true,
     "console": true,

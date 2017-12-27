@@ -7,13 +7,10 @@
  */
 
 /*jshint -W054 */
-/*jshint laxbreak: true */
-/*jshint expr: true */
 
 !function ($, window, document, undefined) {
 // Determine if this is a touch device
-var hasTouch   = 'ontouchstart' in document.documentElement,
-    startEvent = 'touchstart mousedown',
+var startEvent = 'touchstart mousedown',
     moveEvent  = 'touchmove mousemove',
     endEvent   = 'touchend mouseup';
 
