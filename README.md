@@ -5,9 +5,13 @@
 
 ## Installation
 
-The easiest way to install this is using:
+TableDnD is easy to install:
 ```
 npm install tablednd
+```
+or
+```
+yarn add tablednd
 ```
 or
 ```
