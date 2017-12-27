@@ -7,7 +7,7 @@
 
 TableDnD is easy to install:
 ```
-npm install tablednd
+npm install --save tablednd
 ```
 or
 ```
