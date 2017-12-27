@@ -17,8 +17,7 @@ module.exports = function(grunt) {
         options: {
           reporterOutput: ""
         },
-        src: 'js/jquery.tablednd.js',
-        filter: 'isFile'
+        src: 'js/*.js'
       }
     }
   });
