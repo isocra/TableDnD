@@ -25,10 +25,6 @@ You'll also need to include [jQuery](https://jquery.com) before you include this
 
 ---
 
-## NB This is work in progress, please do not install via NPM *YET*
-
----
-
 ## Getting Started
 
 Let's create a simple table. The HTML for the table is very straight forward (no Javascript, pure HTML, we haven't added `thead` or `tbody` elements, but it works find with these too):
