@@ -9,7 +9,7 @@
 /*jshint -W054 */
 
 !function ($, window, document, undefined) {
-// Determine if this is a touch device
+
 var startEvent = 'touchstart mousedown',
     moveEvent  = 'touchmove mousemove',
     endEvent   = 'touchend mouseup';
