@@ -13,14 +13,12 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      options: {
-        // options here to override JSHint defaults
-        globals: {
-          jQuery: true,
-          console: true,
-          module: true,
-          document: true
-        }
+      all: {
+        options: {
+          reporterOutput: "",
+          jshintrc: true
+        },
+        src: 'js/*.js'
       }
     }
   });
