@@ -2,6 +2,7 @@
 [![npm version](https://badge.fury.io/js/tablednd.svg)](https://badge.fury.io/js/tablednd)
 [![CDNJS version](https://img.shields.io/cdnjs/v/TableDnD.svg)](https://cdnjs.com/libraries/TableDnD)
 [![jsDelivr Hits](https://data.jsdelivr.com/v1/package/gh/isocra/TableDnD/badge?style=rounded)](https://www.jsdelivr.com/package/gh/isocra/TableDnD)
+[![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
 
 ## Installation
 
