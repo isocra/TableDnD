@@ -279,7 +279,7 @@ div.indent {
     -webkit-box-shadow: 1px 8px 6px -4px #555, 0 1px 0 #ccc inset, 0 -1px 0 #ccc inset;
 /*-moz-box-shadow: 0 9px 4px -4px #555, 0 1px 0 #ccc inset, 0 -1px 0 #ccc inset, -1px 0 0 #ccc inset;*/
 }
-tr.group_heading td eojq
+tr.group_heading td {
     border-bottom: 8px double #FF6600;
     color: #FF6600;
     font-size: larger;
