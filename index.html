@@ -1,10 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype html>
 <html>
 <head>
     <title>Table Drag and Drop jQuery plugin</title>
-    <link rel="stylesheet" href="tablednd.css" type="text/css"/>
-    <link rel="stylesheet" href="//google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css"/>
+    <link rel="stylesheet" href="tablednd.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.rawgit.com/google/code-prettify/master/src/prettify.css" type="text/css" />
 </head>
 <body>
 <div id="page">
@@ -267,7 +266,7 @@ you enter it using the jQuery <code class="prettyprint">hover</code> function as
             pre = $('<pre class="prettyprint">');
 
         result.html(pre.text($.tableDnD.jsonize(true)));
-        prettyPrint();
+        PR.prettyPrint();
 //            pre.text($(table).tableDnD.jsonize())
 //        return true;
         //// '<div class="indent">&nbsp;</div>',
@@ -417,8 +416,9 @@ you enter it using the jQuery <code class="prettyprint">hover</code> function as
   <a class="toggle-json77" href="#">Hide JSON</a><div id="json77" class="result"></div>
 </div>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
 <script type="text/javascript" src="js/jquery.tablednd.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -453,7 +453,7 @@ you enter it using the jQuery <code class="prettyprint">hover</code> function as
                         .append($('<pre class="prettyprint">').text($.tableDnD.serialize()))
                         .append(' Which looks like this when decoded (decodeURI): ')
                         .append($('<pre class="prettyprint">').text(decodeURI($.tableDnD.serialize()))));
-                prettyPrint();
+                PR.prettyPrint();
             }
         });
 
@@ -470,7 +470,7 @@ you enter it using the jQuery <code class="prettyprint">hover</code> function as
                         .append($('<pre class="prettyprint">').text(data))
                         .append($('<strong>').text('Which looks like this through decodeURIComponent:'))
                         .append($('<pre class="prettyprint">').text(decodeURIComponent(data)));
-                prettyPrint();
+                PR.prettyPrint();
             },
             dragHandle: ".dragHandle"
         });
@@ -490,7 +490,7 @@ you enter it using the jQuery <code class="prettyprint">hover</code> function as
                 $(table).parent().find('.result').append(
                         $('<strong>').text('JSON.stringify result of $.tableDnD.tableData()'))
                         .append($('<pre class="prettyprint">').text($.tableDnD.jsonize(true)));
-                prettyPrint();
+                PR.prettyPrint();
                 $.post("server/ajaxJSONTest.php", $.tableDnD.jsonize(), function (data) {
                     $('#table-7-response').html('<br>'+ data);
                 });

@@ -152,30 +152,29 @@ jQuery.tableDnD = {
     makeDraggable: function(table) {
         var config = table.tableDnDConfig;
 
-        config.dragHandle
+        if(config.dragHandle) {
             // We only need to add the event to the specified cells
-            && $(config.dragHandle, table).each(function() {
+            $(table).on(startEvent, config.dragHandle, function(e) {
                 // The cell is bound to "this"
-                $(this).bind(startEvent, function(e) {
-                    $.tableDnD.initialiseDrag($(this).parents('tr')[0], table, this, e, config);
-                    return false;
-                });
-            })
+                $.tableDnD.initialiseDrag($(this).closest('tr')[0], table, this, e, config);
+                return false;
+            });
+        }
+        else {
             // For backwards compatibility, we add the event to the whole row
             // get all the rows as a wrapped set
-            || $(table.rows).each(function() {
-                // Iterate through each row, the row is bound to "this"
-                if (! $(this).hasClass("nodrag")) {
-                    $(this).bind(startEvent, function(e) {
-                        if (e.target.tagName === "TD") {
-                            $.tableDnD.initialiseDrag(this, table, this, e, config);
-                            return false;
-                        }
-                    }).css("cursor", "move"); // Store the tableDnD object
-                } else {
-                    $(this).css("cursor", ""); // Remove the cursor if we don't have the nodrag class
+            $(table.rows)
+                .filter('.nodrag').css("cursor", "").end() // Remove the cursor if we don't have the nodrag class
+                .not('.nodrag').css("cursor", "move")
+            ;
+            $(table).on(startEvent, 'tr:not(.nodrag)', function(e) {
+                // The row is bound to "this"
+                if (e.target.tagName === "TD") {
+                    $.tableDnD.initialiseDrag(this, table, this, e, config);
+                    return false;
                 }
             });
+        }
     },
     currentOrder: function() {
         var rows = this.currentTable.rows;
@@ -192,8 +191,8 @@ jQuery.tableDnD = {
         // Now we need to capture the mouse up and mouse move event
         // We can use bind so that we don't interfere with other event handlers
         $(document)
-            .bind(moveEvent, this.mousemove)
-            .bind(endEvent, this.mouseup);
+            .on(moveEvent, this.mousemove)
+            .on(endEvent, this.mouseup);
 
         // Call the onDragStart method if there is one
         config.onDragStart
@@ -434,15 +433,15 @@ jQuery.tableDnD = {
 
         // Unbind the event handlers
         $(document)
-            .unbind(moveEvent, this.mousemove)
-            .unbind(endEvent,  this.mouseup);
+            .off(moveEvent, this.mousemove)
+            .off(endEvent,  this.mouseup);
 
         config.hierarchyLevel
             && config.autoCleanRelations
             && $(this.currentTable.rows).first().find('td:first').children().each(function () {
-                myLevel = $(this).parents('tr:first').data('level');
+                myLevel = $(this).closest('tr').data('level');
                 myLevel
-                    && $(this).parents('tr:first').data('level', --myLevel)
+                    && $(this).closest('tr').data('level', --myLevel)
                     && $(this).remove();
             })
             && config.hierarchyLevel > 1
