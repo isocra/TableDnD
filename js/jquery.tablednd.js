@@ -246,16 +246,6 @@ jQuery.tableDnD = {
         var left = 0,
             top  = 0;
 
-        // Safari fix -- thanks to Luis Chato for this!
-        // Safari 2 doesn't correctly grab the offsetTop of a table row
-        // this is detailed here:
-        // http://jacob.peargrove.com/blog/2006/technical/table-row-offsettop-bug-in-safari/
-        // the solution is likewise noted there, grab the offset of a table cell in the row - the firstChild.
-        // note that firefox will return a text node as a first child, so designing a more thorough
-        // solution may need to take that into account, for now this seems to work in firefox, safari, ie
-        if (element.offsetHeight === 0)
-            element = element.firstChild; // a table cell
-
         while (element.offsetParent) {
             left   += element.offsetLeft;
             top    += element.offsetTop;
