@@ -1,6 +1,6 @@
 {
   "name": "tablednd",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "JQuery plugin for dragging and droping rows in a table",
   "main": "Gruntfile.js",
   "dependencies": {},
