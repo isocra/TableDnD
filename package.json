@@ -14,7 +14,8 @@
   "scripts": {
     "test": "grunt test",
     "make-dist": "grunt",
-    "release": "release-it"
+    "release": "release-it",
+    "release-dry-run": "release-it --dry-run"
   },
   "repository": {
     "type": "git",
