@@ -1,8 +1,8 @@
 {
   "name": "tablednd",
-  "version": "1.0.4",
-  "description": "JQuery plugin for dragging and droping rows in a table",
-  "main": "Gruntfile.js",
+  "version": "1.0.5",
+  "description": "JQuery plugin for dragging and dropping rows in a table",
+  "main": "dist/jquery.tablednd.js",
   "dependencies": {},
   "devDependencies": {
     "grunt": "^0.4.5",
@@ -13,6 +13,7 @@
   },
   "scripts": {
     "test": "grunt test",
+    "make-dist": "grunt",
     "release": "release-it"
   },
   "repository": {
