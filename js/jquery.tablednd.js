@@ -57,6 +57,8 @@ jQuery.tableDnD = {
     dragObject: null,
     /** The current mouse offset */
     mouseOffset: null,
+    /** mouse position where started dragging */
+    oldMousePosition: null,
     /** Remember the old value of X and Y so that we don't do too much processing */
     oldX: 0,
     oldY: 0,
@@ -188,6 +190,17 @@ jQuery.tableDnD = {
         this.currentTable  = table;
         this.mouseOffset   = this.getMouseOffset(target, e);
         this.originalOrder = this.currentOrder();
+        this.oldMousePosition = this.mouseCoords(e);
+        
+        //call "findDragDirection" to reset oldX and oldY vars
+        var mousePos = $.tableDnD.mouseCoords(e);
+        var x = mousePos.x - $.tableDnD.mouseOffset.x;
+        var y = mousePos.y - $.tableDnD.mouseOffset.y;
+        var moving = $.tableDnD.findDragDirection(x, y);
+
+		//ie/edge workaround (it has a bug, transform not allowed for TR elements, but allowed for TD, still not fixed, see StackOverflow)
+		if (this.isIeOrEdge())
+			$(dragObject).css("display", "block");
 
         // Now we need to capture the mouse up and mouse move event
         // We can use bind so that we don't interfere with other event handlers
@@ -199,6 +212,10 @@ jQuery.tableDnD = {
         config.onDragStart
             && config.onDragStart(table, target);
     },
+	isIeOrEdge: function () {
+		var ua = window.navigator.userAgent;
+		return ua.indexOf('MSIE ') > -1 || ua.indexOf('Trident/') > -1 || ua.indexOf('Edge/') > -1;
+	},
     updateTables: function() {
         this.each(function() {
             // this is now bound to each matching table
@@ -352,12 +369,8 @@ jQuery.tableDnD = {
 
         // auto scroll the window
         $.tableDnD.autoScroll(mousePos);
-
-        currentRow = $.tableDnD.findDropTargetRow(dragObj, y);
-        moving = $.tableDnD.findDragDirection(x, y);
-
-        $.tableDnD.moveVerticle(moving, currentRow);
-        $.tableDnD.moveHorizontal(moving, currentRow);
+        
+        dragObj.css("transform", "translate(" + (mousePos.x - $.tableDnD.oldMousePosition.x) + "px, " + (mousePos.y - $.tableDnD.oldMousePosition.y) + "px)");
 
         return false;
     },
@@ -413,7 +426,7 @@ jQuery.tableDnD = {
         }
         return null;
     },
-    processMouseup: function() {
+    processMouseup: function(e) {
         if (!this.currentTable || !this.dragObject)
             return null;
 
@@ -421,6 +434,15 @@ jQuery.tableDnD = {
             droppedRow  = this.dragObject,
             parentLevel = 0,
             myLevel     = 0;
+        
+        //actually move the element
+        var mousePos = $.tableDnD.mouseCoords(e);
+        var x = mousePos.x - $.tableDnD.mouseOffset.x;
+        var y = mousePos.y - $.tableDnD.mouseOffset.y;
+        var currentRow = $.tableDnD.findDropTargetRow($(droppedRow), y);
+        var moving = $.tableDnD.findDragDirection(x, y);
+        $.tableDnD.moveVerticle(moving, currentRow);
+        $.tableDnD.moveHorizontal(moving, currentRow);
 
         // Unbind the event handlers
         $(document)
@@ -463,12 +485,18 @@ jQuery.tableDnD = {
         // Call the onDragStop method if there is one
         config.onDragStop
             && config.onDragStop(this.currentTable, droppedRow);
+        
+		$(droppedRow).css("transform", "none");
+
+		//ie/edge workaround
+		if (this.isIeOrEdge())
+			$(droppedRow).css("display", "");
 
         this.currentTable = null; // let go of the table too
     },
     mouseup: function(e) {
         e && e.preventDefault();
-        $.tableDnD.processMouseup();
+        $.tableDnD.processMouseup(e);
         return false;
     },
     jsonize: function(pretify) {
