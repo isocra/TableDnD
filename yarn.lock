@@ -1829,8 +1829,8 @@ registry-url@^5.0.0:
     rc "^1.2.8"
 
 release-it@^14.12.5:
-  version "14.12.5"
-  resolved "https://registry.yarnpkg.com/release-it/-/release-it-14.12.5.tgz#aaf9802545717f299e14d1dbf025afa7bf956668"
+  version "14.13.1"
+  resolved "https://registry.yarnpkg.com/release-it/-/release-it-14.13.1.tgz#d87bb2dc488904ea0d39eddf0b354081c645381f"
   dependencies:
     "@iarna/toml" "2.2.5"
     "@octokit/rest" "18.12.0"
@@ -1858,6 +1858,7 @@ release-it@^14.12.5:
     update-notifier "5.1.0"
     url-join "4.0.1"
     uuid "8.3.2"
+    wildcard-match "5.1.2"
     yaml "1.10.2"
     yargs-parser "20.2.9"
 
@@ -2236,6 +2237,10 @@ widest-line@^3.1.0:
   resolved "https://registry.yarnpkg.com/widest-line/-/widest-line-3.1.0.tgz#8292333bbf66cb45ff0de1603b136b7ae1496eca"
   dependencies:
     string-width "^4.0.0"
+
+wildcard-match@5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/wildcard-match/-/wildcard-match-5.1.2.tgz#66b438001391674d8599b45da051e0bd9f33cd2a"
 
 windows-release@^4.0.0:
   version "4.0.0"
