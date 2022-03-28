@@ -951,12 +951,12 @@ grunt-contrib-jshint@^3.2.0:
     jshint "~2.13.4"
 
 grunt-contrib-uglify@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/grunt-contrib-uglify/-/grunt-contrib-uglify-5.0.1.tgz#d1eeccafdfedc27353e5f610415d18340c568c51"
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/grunt-contrib-uglify/-/grunt-contrib-uglify-5.1.0.tgz#42afcca2bd858cb0f423cc1f7f95ab475f4a64e1"
   dependencies:
     chalk "^2.4.1"
     maxmin "^2.1.0"
-    uglify-js "^3.13.3"
+    uglify-js "^3.15.2"
     uri-path "^1.0.0"
 
 grunt-known-options@~2.0.0:
@@ -2131,9 +2131,9 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-uglify-js@^3.13.3:
-  version "3.15.2"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.15.2.tgz#1ed2c976f448063b1f87adb68c741be79959f951"
+uglify-js@^3.15.2:
+  version "3.15.3"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.15.3.tgz#9aa82ca22419ba4c0137642ba0df800cb06e0471"
 
 unc-path-regex@^0.1.2:
   version "0.1.2"
