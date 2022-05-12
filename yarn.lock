@@ -942,17 +942,19 @@ grunt-cli@~1.4.2:
     nopt "~4.0.1"
     v8flags "~3.2.0"
 
-grunt-contrib-jshint@^3.2.0:
+grunt-contrib-jshint@3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/grunt-contrib-jshint/-/grunt-contrib-jshint-3.2.0.tgz#d97c125ce6dafef1b0cc766cd87201ae0fb7b408"
+  integrity sha512-pcXWCSZWfoMSvcV4BwH21TUtLtcX0Ms8IGuOPIcLeXK3fud9KclY7iqMKY94jFx8TxZzh028YYtpR+io8DiEaQ==
   dependencies:
     chalk "~4.1.2"
     hooker "^0.2.3"
     jshint "~2.13.4"
 
-grunt-contrib-uglify@^5.0.1:
+grunt-contrib-uglify@5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/grunt-contrib-uglify/-/grunt-contrib-uglify-5.0.1.tgz#d1eeccafdfedc27353e5f610415d18340c568c51"
+  integrity sha512-T/aXZ4WIpAtoswZqb6HROKg7uq9QbKwl+lUuOwK4eoFj3tFv9/a/oMyd3/qvetV29Pbf8P1YYda1gDwZppr60A==
   dependencies:
     chalk "^2.4.1"
     maxmin "^2.1.0"
@@ -1332,7 +1334,7 @@ js-yaml@~3.14.0:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
-jshint@^2.9.3, jshint@~2.13.4:
+jshint@2.13.4, jshint@~2.13.4:
   version "2.13.4"
   resolved "https://registry.yarnpkg.com/jshint/-/jshint-2.13.4.tgz#cee025a57c3f393d5455532d9ec7ccb018f890db"
   dependencies:
@@ -1828,9 +1830,10 @@ registry-url@^5.0.0:
   dependencies:
     rc "^1.2.8"
 
-release-it@^14.12.5:
+release-it@14.13.1:
   version "14.13.1"
   resolved "https://registry.yarnpkg.com/release-it/-/release-it-14.13.1.tgz#d87bb2dc488904ea0d39eddf0b354081c645381f"
+  integrity sha512-mrng5bqZDFMr/7oCH3kuflwjKpKki4dUp6yYGxs20scYCvvd8rHAI5pdQOJHwI5BKHAC/pad0UjAEycMWQnEIw==
   dependencies:
     "@iarna/toml" "2.2.5"
     "@octokit/rest" "18.12.0"
