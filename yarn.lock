@@ -1258,14 +1258,14 @@ grunt-contrib-jshint@3.2.0:
     hooker "^0.2.3"
     jshint "~2.13.4"
 
-grunt-contrib-uglify@5.2.1:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/grunt-contrib-uglify/-/grunt-contrib-uglify-5.2.1.tgz#608e3c4dc13e49793581a38b9aefb98a092ebc76"
-  integrity sha512-SPTRB+2Fp4TFbiCfHWBPsHM4wTgwk5auntQ2jsfJbZBnkVU1RF/TErXHa/slEHHssmIoZsyjS5exR12RBOQi/w==
+grunt-contrib-uglify@5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/grunt-contrib-uglify/-/grunt-contrib-uglify-5.2.2.tgz#447c0b58451a1fca20768371e07e723a870dfe98"
+  integrity sha512-ITxiWxrjjP+RZu/aJ5GLvdele+sxlznh+6fK9Qckio5ma8f7Iv8woZjRkGfafvpuygxNefOJNc+hfjjBayRn2Q==
   dependencies:
     chalk "^4.1.2"
     maxmin "^3.0.0"
-    uglify-js "^3.15.4"
+    uglify-js "^3.16.1"
     uri-path "^1.0.0"
 
 grunt-known-options@~2.0.0:
@@ -2967,10 +2967,10 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-uglify-js@^3.15.4:
-  version "3.15.5"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.15.5.tgz#2b10f9e0bfb3f5c15a8e8404393b6361eaeb33b3"
-  integrity sha512-hNM5q5GbBRB5xB+PMqVRcgYe4c8jbyZ1pzZhS6jbq54/4F2gFK869ZheiE5A8/t+W5jtTNpWef/5Q9zk639FNQ==
+uglify-js@^3.16.1:
+  version "3.16.1"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.16.1.tgz#0e7ec928b3d0b1e1d952bce634c384fd56377317"
+  integrity sha512-X5BGTIDH8U6IQ1TIRP62YC36k+ULAa1d59BxlWvPUJ1NkW5L3FwcGfEzuVvGmhJFBu0YJ5Ge25tmRISqCmLiRQ==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"
