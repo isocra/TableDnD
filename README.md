@@ -34,6 +34,10 @@ You'll also need to include [jQuery](https://jquery.com) before you include this
 
 Let's create a simple table. The HTML for the table is very straight forward (no Javascript, pure HTML, we haven't added `thead` or `tbody` elements, but it works fine with these too):
 
+> **Warning**
+> 
+> **Every row in the HTML table must have a unique ID or it will fail (sadly without a clear message in the console for now...).**
+
 ```html
 <table id="table-1" cellspacing="0" cellpadding="2">
     <tr id="1"><td>1</td><td>One</td><td>some text</td></tr>
