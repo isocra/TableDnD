@@ -2173,10 +2173,10 @@ jsbn@1.1.0:
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-1.1.0.tgz#b01307cb29b618a1ed26ec79e911f803c4da0040"
   integrity sha512-4bYVV3aAMtDTTu4+xsDYa6sy9GyJ69/amsu9sYF2zqjiEoZA5xJi3BrfX3uY+/IekIu7MwdObdbDWpoZdBv3/A==
 
-jshint@2.13.5:
-  version "2.13.5"
-  resolved "https://registry.yarnpkg.com/jshint/-/jshint-2.13.5.tgz#34654b44387ef112b39c205e2e70b99385376579"
-  integrity sha512-dB2n1w3OaQ35PLcBGIWXlszjbPZwsgZoxsg6G8PtNf2cFMC1l0fObkYLUuXqTTdi6tKw4sAjfUseTdmDMHQRcg==
+jshint@2.13.6:
+  version "2.13.6"
+  resolved "https://registry.yarnpkg.com/jshint/-/jshint-2.13.6.tgz#3679a2687a3066fa9034ef85d8c305613a31eec6"
+  integrity sha512-IVdB4G0NTTeQZrBoM8C5JFVLjV2KtZ9APgybDA1MK73xb09qFs0jCXyQLnCOp1cSZZZbvhq/6mfXHUTaDkffuQ==
   dependencies:
     cli "~1.0.0"
     console-browserify "1.1.x"
