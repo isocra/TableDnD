@@ -9,7 +9,7 @@
     "grunt-contrib-jshint": "3.2.0",
     "grunt-contrib-uglify": "5.2.2",
     "jshint": "2.13.6",
-    "release-it": "17.4.1"
+    "release-it": "17.6.0"
   },
   "scripts": {
     "test": "grunt test",
